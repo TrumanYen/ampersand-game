@@ -5,7 +5,8 @@ public:
   Simulation(int maxX, int maxY);
   ~Simulation();
 
-  void teleport(int deltaX, int deltaY);
+  void incrementPosition(int deltaX, int deltaY); // should make private soon
+
   std::pair<int, int> currentPos();
 
 private:

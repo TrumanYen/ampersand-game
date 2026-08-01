@@ -1,5 +1,6 @@
 #include <ncurses.h>
 #include <simulation.h>
+
 int main() {
   initscr();
   // nodelay(stdscr, TRUE);
@@ -7,7 +8,7 @@ int main() {
 
   int maxy, maxx;
   getmaxyx(stdscr, maxy, maxx);
-  Simulation sim(maxx, maxy);
+  Simulation sim(maxx - 1, maxy - 1);
 
   bool running = true;
   int inputchar;
@@ -16,22 +17,21 @@ int main() {
     inputchar = getch();
     switch (inputchar) {
     case 'h':
-      sim.teleport(-1, 0);
+      sim.incrementPosition(-1, 0);
       break;
     case 'l':
-      sim.teleport(1, 0);
+      sim.incrementPosition(1, 0);
       break;
     case 'j':
-      sim.teleport(0, 1);
+      sim.incrementPosition(0, 1);
       break;
     case 'k':
-      sim.teleport(0, -1);
+      sim.incrementPosition(0, -1);
       break;
     case 'q':
       running = false;
       break;
     default:
-      printw("What even is that");
       break;
     }
     erase();
