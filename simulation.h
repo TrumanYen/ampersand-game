@@ -2,16 +2,24 @@
 
 class Simulation {
 public:
-  Simulation(int maxX, int maxY);
+  Simulation(double maxX, double maxY);
   ~Simulation();
 
-  void incrementPosition(int deltaX, int deltaY); // should make private soon
+  void incrementTimeMs(double deltaMs);
 
-  std::pair<int, int> currentPos();
+  void incrementVelocity(double deltaVelX,
+                         double deltaVelY); // currently chars per millisecond
+  void incrementPosition(double deltaX,
+                         double deltaY); // should make private soon
+
+  std::pair<double, double> currentPos();
 
 private:
-  int maxX_;
-  int maxY_;
-  int xPos_;
-  int yPos_;
+  double maxX_;
+  double maxY_;
+
+  double xPos_;
+  double yPos_;
+  double xVel_;
+  double yVel_;
 };

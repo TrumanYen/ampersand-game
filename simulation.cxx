@@ -2,19 +2,30 @@
 
 #include <algorithm>
 
-Simulation::Simulation(int maxX, int maxY)
-    : maxX_(maxX), maxY_(maxY), xPos_(0), yPos_(0) {}
+Simulation::Simulation(double maxX, double maxY)
+    : maxX_(maxX), maxY_(maxY), xPos_(0), yPos_(0), xVel_(0), yVel_(0) {}
 
 Simulation::~Simulation() = default;
 
-void Simulation::incrementPosition(int deltaX, int deltaY) {
+void Simulation::incrementTimeMs(double deltaMs) {
+  double deltaX = xVel_ * deltaMs;
+  double deltaY = yVel_ * deltaMs;
+  incrementPosition(deltaX, deltaY);
+}
+
+void Simulation::incrementVelocity(double deltaVelX, double deltaVelY) {
+  xVel_ += deltaVelX;
+  yVel_ += deltaVelY;
+}
+
+void Simulation::incrementPosition(double deltaX, double deltaY) {
   xPos_ += deltaX;
   yPos_ += deltaY;
 
-  xPos_ = std::max(0, std::min(xPos_, maxX_));
-  yPos_ = std::max(0, std::min(yPos_, maxY_));
+  xPos_ = std::max(0.0, std::min(xPos_, maxX_));
+  yPos_ = std::max(0.0, std::min(yPos_, maxY_));
 }
 
-std::pair<int, int> Simulation::currentPos() {
-  return std::pair<int, int>(xPos_, yPos_);
+std::pair<double, double> Simulation::currentPos() {
+  return std::pair<double, double>(xPos_, yPos_);
 }
