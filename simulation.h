@@ -13,8 +13,7 @@ public:
   std::pair<double, double> currentPos();
 
 private:
-  void incrementPosition(double deltaX,
-                         double deltaY); // should make private soon
+  void incrementPosition(double deltaX, double deltaY);
 
 private:
   double maxX_;

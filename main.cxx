@@ -42,7 +42,6 @@ int main() {
     }
     erase();
     sim.incrementTimeMs(FRAME_PERIOD_MS);
-    // shhhh don't mind the implicit cast from double to int...
     std::pair<int, int> currentPosition = sim.currentPositionCharsXY();
     mvaddch(currentPosition.second, currentPosition.first, '@');
     refresh();
