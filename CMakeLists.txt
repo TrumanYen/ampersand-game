@@ -21,6 +21,7 @@ target_sources(${ExeName} PRIVATE
   simulation.cxx
   simToTerminalScaler.cxx
   gameLogicContainer.cxx
+  terminalPresenter.cxx
 )
 
 target_include_directories(${ExeName} PRIVATE 
