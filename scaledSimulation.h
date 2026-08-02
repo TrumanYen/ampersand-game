@@ -1,9 +1,8 @@
+#pragma once
+
 #include <memory>
+#include <simulation.h>
 #include <utility>
-
-class Simulation;
-
-enum class Direction { Up, Down, Left, Right };
 
 class ScaledSimulation {
 public:
@@ -11,9 +10,9 @@ public:
 
   ~ScaledSimulation();
 
-  void accelerate(Direction direction);
-  void incrementTimeMs(int deltaTimeMs);
-
+  // Can hide behind an interface in the future if we only want some funtions
+  // accessible:
+  Simulation &sim();
   std::pair<int, int> currentPositionCharsXY();
 
 private:

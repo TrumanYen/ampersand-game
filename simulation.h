@@ -1,19 +1,26 @@
+#pragma once
+
 #include <utility>
 
+enum class ThrusterState { Up, Down, Left, Right, Off };
+
 class Simulation {
-  // All units of distance in meters
+  // All units of distance in meters and frame of reference is right down
 public:
   Simulation(double maxX, double maxY);
   ~Simulation();
 
   void incrementTimeMs(double deltaMs);
 
-  void incrementVelocity(double deltaVelX, double deltaVelY);
+  void setThrusterState(ThrusterState state);
 
   std::pair<double, double> currentPos();
+  std::pair<double, double> currentVel();
+  std::pair<double, double> currentAccel();
 
 private:
-  void incrementPosition(double deltaX, double deltaY);
+  void displaceAmpersand(double deltaX, double deltaY);
+  void calculateCurrentAcceleration();
 
 private:
   double maxX_;
@@ -23,4 +30,8 @@ private:
   double yPos_;
   double xVel_;
   double yVel_;
+  double xAccel_;
+  double yAccel_;
+
+  ThrusterState thrusterState_;
 };

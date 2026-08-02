@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <chrono>
 #include <ncurses.h>
 #include <scaledSimulation.h>
@@ -14,36 +15,63 @@ int main() {
 
   int maxy, maxx;
   getmaxyx(stdscr, maxy, maxx);
-  ScaledSimulation sim(maxx, maxy);
+  int halfX = maxx / 2;
+  int statsTextPosition =
+      std::max(0, halfX - 24); // yes I counted the number of characters in the
+                               // message and hard-coded it.
+  ScaledSimulation scaledSim(maxx, maxy);
+  Simulation &sim = scaledSim.sim();
 
   bool running = true;
   int inputchar;
+  int mostRecentChar;
+  int framesSinceLastProcessedKeypresses = 0;
 
   while (running) {
-    inputchar = getch();
-    switch (inputchar) {
-    case 'h':
-      sim.accelerate(Direction::Left);
-      break;
-    case 'l':
-      sim.accelerate(Direction::Right);
-      break;
-    case 'j':
-      sim.accelerate(Direction::Down);
-      break;
-    case 'k':
-      sim.accelerate(Direction::Up);
-      break;
-    case 'q':
-      running = false;
-      break;
-    default:
-      break;
+    // Should switch over to actually measuring key pressed and release events,
+    // because this logic relies on the OS's key repeat rate being faster than
+    // the FPS. This is why we're only processing keypresses every 6 frames
+    if (framesSinceLastProcessedKeypresses >= 6) {
+      mostRecentChar = ERR;
+      while ((inputchar = getch()) != ERR) {
+        // purge buffer and just get the most recent value
+        mostRecentChar = inputchar;
+      }
+      switch (mostRecentChar) {
+      case 'h':
+        sim.setThrusterState(ThrusterState::Left);
+        break;
+      case 'l':
+        sim.setThrusterState(ThrusterState::Right);
+        break;
+      case 'j':
+        sim.setThrusterState(ThrusterState::Down);
+        break;
+      case 'k':
+        sim.setThrusterState(ThrusterState::Up);
+        break;
+      case 'q':
+        running = false;
+        break;
+      default:
+        sim.setThrusterState(ThrusterState::Off);
+        break;
+      }
+      framesSinceLastProcessedKeypresses = 0;
+    } else {
+      framesSinceLastProcessedKeypresses++;
     }
     erase();
     sim.incrementTimeMs(FRAME_PERIOD_MS);
-    std::pair<int, int> currentPosition = sim.currentPositionCharsXY();
+    std::pair<int, int> currentPosition = scaledSim.currentPositionCharsXY();
     mvaddch(currentPosition.second, currentPosition.first, '@');
+    std::pair<double, double> currentPos = sim.currentPos();
+    std::pair<double, double> currentVel = sim.currentVel();
+    std::pair<double, double> currentAccel = sim.currentAccel();
+    mvprintw(0, statsTextPosition,
+             "Pos: %.3f, %.3f    Vel: %.3f, %.3f   Accel: %.3f, %.3f",
+             currentPos.first, currentPos.second, currentVel.first,
+             currentVel.second, currentAccel.first, currentAccel.second);
     refresh();
     // Quick and dirty timing loop.  Should thread properly later
     std::this_thread::sleep_for(std::chrono::milliseconds(FRAME_PERIOD_MS));
