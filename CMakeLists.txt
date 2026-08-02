@@ -19,6 +19,7 @@ target_sources(${ExeName} PRIVATE
 
   main.cxx
   simulation.cxx
+  scaledSimulation.cxx
 )
 
 target_include_directories(${ExeName} PRIVATE 

@@ -1,12 +1,11 @@
 #include <chrono>
 #include <ncurses.h>
-#include <simulation.h>
+#include <scaledSimulation.h>
 #include <thread>
 
 int main() {
   const int TARGET_FPS = 60;
   const int FRAME_PERIOD_MS = 1000 / TARGET_FPS;
-  const double ACCEL_CHARS_PER_MS = 0.003;
 
   initscr();
   nodelay(stdscr, TRUE);
@@ -15,7 +14,7 @@ int main() {
 
   int maxy, maxx;
   getmaxyx(stdscr, maxy, maxx);
-  Simulation sim(maxx - 1, maxy - 1);
+  ScaledSimulation sim(maxx, maxy);
 
   bool running = true;
   int inputchar;
@@ -24,16 +23,16 @@ int main() {
     inputchar = getch();
     switch (inputchar) {
     case 'h':
-      sim.incrementVelocity(-1.0 * ACCEL_CHARS_PER_MS, 0.0);
+      sim.accelerate(Direction::Left);
       break;
     case 'l':
-      sim.incrementVelocity(ACCEL_CHARS_PER_MS, 0.0);
+      sim.accelerate(Direction::Right);
       break;
     case 'j':
-      sim.incrementVelocity(0.0, ACCEL_CHARS_PER_MS);
+      sim.accelerate(Direction::Down);
       break;
     case 'k':
-      sim.incrementVelocity(0.0, -1.0 * ACCEL_CHARS_PER_MS);
+      sim.accelerate(Direction::Up);
       break;
     case 'q':
       running = false;
@@ -44,7 +43,7 @@ int main() {
     erase();
     sim.incrementTimeMs(FRAME_PERIOD_MS);
     // shhhh don't mind the implicit cast from double to int...
-    std::pair<int, int> currentPosition = sim.currentPos();
+    std::pair<int, int> currentPosition = sim.currentPositionCharsXY();
     mvaddch(currentPosition.second, currentPosition.first, '@');
     refresh();
     // Quick and dirty timing loop.  Should thread properly later

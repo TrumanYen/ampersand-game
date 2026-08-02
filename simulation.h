@@ -1,18 +1,20 @@
 #include <utility>
 
 class Simulation {
+  // All units of distance in meters
 public:
   Simulation(double maxX, double maxY);
   ~Simulation();
 
   void incrementTimeMs(double deltaMs);
 
-  void incrementVelocity(double deltaVelX,
-                         double deltaVelY); // currently chars per millisecond
-  void incrementPosition(double deltaX,
-                         double deltaY); // should make private soon
+  void incrementVelocity(double deltaVelX, double deltaVelY);
 
   std::pair<double, double> currentPos();
+
+private:
+  void incrementPosition(double deltaX,
+                         double deltaY); // should make private soon
 
 private:
   double maxX_;

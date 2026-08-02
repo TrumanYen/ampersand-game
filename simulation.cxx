@@ -18,14 +18,14 @@ void Simulation::incrementVelocity(double deltaVelX, double deltaVelY) {
   yVel_ += deltaVelY;
 }
 
+std::pair<double, double> Simulation::currentPos() {
+  return std::pair<double, double>(xPos_, yPos_);
+}
+
 void Simulation::incrementPosition(double deltaX, double deltaY) {
   xPos_ += deltaX;
   yPos_ += deltaY;
 
   xPos_ = std::max(0.0, std::min(xPos_, maxX_));
   yPos_ = std::max(0.0, std::min(yPos_, maxY_));
-}
-
-std::pair<double, double> Simulation::currentPos() {
-  return std::pair<double, double>(xPos_, yPos_);
 }
