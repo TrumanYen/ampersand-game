@@ -1,6 +1,6 @@
 #include <gameLogicContainer.h>
 
-#include <scaledSimulation.h>
+#include <simToTerminalScaler.h>
 #include <simulation.h>
 
 namespace {
@@ -15,10 +15,10 @@ GameLogicContainer::GameLogicContainer(int numCharsX, int numCharsY)
     : sim_(std::make_unique<Simulation>(
           getMapAspectRatioFromTerminalDimensions(numCharsX, numCharsY))),
       scaledSim_(
-          std::make_unique<ScaledSimulation>(numCharsX, numCharsY, *sim_)) {}
+          std::make_unique<SimToTerminalScaler>(numCharsX, numCharsY, *sim_)) {}
 
 GameLogicContainer::~GameLogicContainer() = default;
 
 Simulation &GameLogicContainer::sim() { return *sim_; }
 
-ScaledSimulation &GameLogicContainer::scaledSim() { return *scaledSim_; }
+SimToTerminalScaler &GameLogicContainer::simScaler() { return *scaledSim_; }

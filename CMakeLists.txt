@@ -19,7 +19,7 @@ target_sources(${ExeName} PRIVATE
 
   main.cxx
   simulation.cxx
-  scaledSimulation.cxx
+  simToTerminalScaler.cxx
   gameLogicContainer.cxx
 )
 

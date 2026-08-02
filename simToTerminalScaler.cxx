@@ -1,9 +1,9 @@
 #include <algorithm>
-#include <scaledSimulation.h>
+#include <simToTerminalScaler.h>
 #include <simulation.h>
 
-ScaledSimulation::ScaledSimulation(int numCharsX, int numCharsY,
-                                   Simulation &sim)
+SimToTerminalScaler::SimToTerminalScaler(int numCharsX, int numCharsY,
+                                         Simulation &sim)
     : maxXChars_(numCharsX - 1), maxYChars_(numCharsY - 1), sim_(sim) {
   // account for the fact that each character is twice as tall as it is wide. We
   // want this to be the ratio that the player actually sees, reflected in the
@@ -13,11 +13,9 @@ ScaledSimulation::ScaledSimulation(int numCharsX, int numCharsY,
   simToTerminalScaleY_ = 0.5 * simToTerminalScaleX_;
 }
 
-ScaledSimulation::~ScaledSimulation() = default;
+SimToTerminalScaler::~SimToTerminalScaler() = default;
 
-Simulation &ScaledSimulation::sim() { return sim_; }
-
-std::pair<int, int> ScaledSimulation::currentPositionCharsXY() {
+std::pair<int, int> SimToTerminalScaler::currentPositionCharsXY() {
   std::pair<double, double> currentPosMeters = sim_.currentPos();
 
   int posXUnbounded = currentPosMeters.first * simToTerminalScaleX_;

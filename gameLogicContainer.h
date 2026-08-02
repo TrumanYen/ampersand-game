@@ -3,7 +3,7 @@
 #include <memory>
 
 class Simulation;
-class ScaledSimulation;
+class SimToTerminalScaler;
 
 class GameLogicContainer {
 public:
@@ -11,9 +11,9 @@ public:
   ~GameLogicContainer();
 
   Simulation &sim();
-  ScaledSimulation &scaledSim();
+  SimToTerminalScaler &simScaler();
 
 private:
   std::unique_ptr<Simulation> sim_;
-  std::unique_ptr<ScaledSimulation> scaledSim_;
+  std::unique_ptr<SimToTerminalScaler> scaledSim_;
 };

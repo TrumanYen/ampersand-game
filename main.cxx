@@ -2,7 +2,7 @@
 #include <chrono>
 #include <gameLogicContainer.h>
 #include <ncurses.h>
-#include <scaledSimulation.h>
+#include <simToTerminalScaler.h>
 #include <simulation.h>
 #include <thread>
 
@@ -65,7 +65,7 @@ int main() {
     erase();
     container.sim().incrementTimeMs(FRAME_PERIOD_MS);
     std::pair<int, int> currentPosition =
-        container.scaledSim().currentPositionCharsXY();
+        container.simScaler().currentPositionCharsXY();
     mvaddch(currentPosition.second, currentPosition.first, '@');
     std::pair<double, double> currentPos = container.sim().currentPos();
     std::pair<double, double> currentVel = container.sim().currentVel();
