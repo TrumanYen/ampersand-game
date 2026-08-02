@@ -66,7 +66,7 @@ int main() {
     container.sim().incrementTimeMs(FRAME_PERIOD_MS);
     std::pair<int, int> currentPosition =
         container.simScaler().currentPositionCharsXY();
-    mvaddch(currentPosition.second, currentPosition.first, '@');
+    mvaddch(currentPosition.second, currentPosition.first, '&');
     std::pair<double, double> currentPos = container.sim().currentPos();
     std::pair<double, double> currentVel = container.sim().currentVel();
     std::pair<double, double> currentAccel = container.sim().currentAccel();
