@@ -7,9 +7,10 @@ enum class ThrusterState { Up, Down, Left, Right, Off };
 class Simulation {
   // All units of distance in meters and frame of reference is right down
 public:
-  Simulation(double maxX, double maxY);
+  Simulation(double widthToHeightAspectRatio);
   ~Simulation();
 
+  std::pair<double, double> mapDimensionsWidthHeight();
   void incrementTimeMs(double deltaMs);
 
   void setThrusterState(ThrusterState state);

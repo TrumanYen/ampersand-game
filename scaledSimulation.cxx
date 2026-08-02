@@ -1,21 +1,17 @@
 #include <algorithm>
 #include <scaledSimulation.h>
 
-namespace {
-static const double MAP_WIDTH_M = 10.0;
-} // namespace
-
 ScaledSimulation::ScaledSimulation(int numCharsX, int numCharsY)
     : maxXChars_(numCharsX - 1), maxYChars_(numCharsY - 1) {
-  simToTerminalScaleX_ = static_cast<double>(maxXChars_) / MAP_WIDTH_M;
-  simToTerminalScaleY_ = 0.5 * simToTerminalScaleX_;
   // account for the fact that each character is twice as tall as it is wide. We
   // want this to be the ratio that the player actually sees, reflected in the
   // simulation.
-  double heightToWidthAspectRatio =
-      2.0 * static_cast<double>(maxYChars_) / static_cast<double>(maxXChars_);
-  double mapHeightM = heightToWidthAspectRatio * MAP_WIDTH_M;
-  sim_ = std::make_unique<Simulation>(MAP_WIDTH_M, mapHeightM);
+  double widthToHeightAspectRatio =
+      0.5 * static_cast<double>(maxXChars_) / static_cast<double>(maxYChars_);
+  sim_ = std::make_unique<Simulation>(widthToHeightAspectRatio);
+  std::pair<double, double> mapDimensions = sim_->mapDimensionsWidthHeight();
+  simToTerminalScaleX_ = static_cast<double>(maxXChars_) / mapDimensions.first;
+  simToTerminalScaleY_ = 0.5 * simToTerminalScaleX_;
 }
 
 ScaledSimulation::~ScaledSimulation() = default;

@@ -4,17 +4,24 @@
 #include <cmath>
 
 namespace {
+static const double MAP_HEIGHT_M = 6.0;
+
 static const double THRUSTER_ACCEL_MPSS = 15.0;
 static const double TERMINAL_VELOCITY = 20.0;
 static const double NEGATIVE_TERMINAL_VELOCITY = -1.0 * TERMINAL_VELOCITY;
 
 } // namespace
 
-Simulation::Simulation(double maxX, double maxY)
-    : maxX_(maxX), maxY_(maxY), xPos_(0.0), yPos_(0.0), xVel_(0.0), yVel_(0.0),
-      xAccel_(0.0), yAccel_(0.0) {}
+Simulation::Simulation(double widthToHeightAspectRatio)
+    : maxX_(widthToHeightAspectRatio * MAP_HEIGHT_M), maxY_(MAP_HEIGHT_M),
+      xPos_(0.0), yPos_(0.0), xVel_(0.0), yVel_(0.0), xAccel_(0.0),
+      yAccel_(0.0) {}
 
 Simulation::~Simulation() = default;
+
+std::pair<double, double> Simulation::mapDimensionsWidthHeight() {
+  return std::pair<double, double>(maxX_, maxY_);
+}
 
 void Simulation::incrementTimeMs(double deltaMs) {
   calculateCurrentAcceleration();
