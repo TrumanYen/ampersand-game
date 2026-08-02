@@ -57,6 +57,8 @@ std::pair<double, double> Simulation::currentAccel() {
   return std::pair<double, double>(xAccel_, yAccel_);
 }
 
+ThrusterState Simulation::currentThrusterState() { return thrusterState_; }
+
 void Simulation::displaceAmpersand(double deltaX, double deltaY) {
   // for now we can assume the only collisions are the walls
   double desiredXPos = xPos_ + deltaX;

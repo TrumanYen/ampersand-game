@@ -18,6 +18,7 @@ public:
   std::pair<double, double> currentPos();
   std::pair<double, double> currentVel();
   std::pair<double, double> currentAccel();
+  ThrusterState currentThrusterState();
 
 private:
   void displaceAmpersand(double deltaX, double deltaY);

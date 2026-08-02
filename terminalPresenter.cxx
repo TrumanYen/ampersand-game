@@ -8,6 +8,8 @@
 #include <simulation.h>
 #include <thread>
 
+#define TRANSPARENT_BLUE_PAIR 1
+
 namespace {
 const int TARGET_FPS = 60;
 const int FRAME_PERIOD_MS = 1000 / TARGET_FPS;
@@ -20,6 +22,9 @@ TerminalPresenter::TerminalPresenter() {
   nodelay(stdscr, TRUE);
   noecho();
   curs_set(0);
+  start_color();
+  use_default_colors();
+  init_pair(TRANSPARENT_BLUE_PAIR, COLOR_BLUE, -1);
   // Unfortunately need to instantiate this container here for now because we do
   // not yet have the ability to dynamically resize, so we need to receive the
   // aspect ratio on construction
@@ -87,7 +92,50 @@ void TerminalPresenter::handleKeyPresses() {
 void TerminalPresenter::drawAmpersand() {
   std::pair<int, int> currentPosition =
       container_->simScaler().currentPositionCharsXY();
+  ThrusterState currentThrusterState = container_->sim().currentThrusterState();
+
   mvaddch(currentPosition.second, currentPosition.first, '&');
+  switch (currentThrusterState) {
+  case ThrusterState::Left:
+    mvaddch(currentPosition.second, currentPosition.first + 1,
+            '<' | COLOR_PAIR(TRANSPARENT_BLUE_PAIR));
+    mvaddch(currentPosition.second, currentPosition.first + 2,
+            '<' | COLOR_PAIR(TRANSPARENT_BLUE_PAIR));
+    break;
+  case ThrusterState::Right:
+    mvaddch(currentPosition.second, currentPosition.first - 1,
+            '>' | COLOR_PAIR(TRANSPARENT_BLUE_PAIR));
+    mvaddch(currentPosition.second, currentPosition.first - 2,
+            '>' | COLOR_PAIR(TRANSPARENT_BLUE_PAIR));
+    break;
+  case ThrusterState::Down:
+    mvaddch(currentPosition.second - 1, currentPosition.first,
+            'v' | COLOR_PAIR(TRANSPARENT_BLUE_PAIR));
+    mvaddch(currentPosition.second - 2, currentPosition.first,
+            'v' | COLOR_PAIR(TRANSPARENT_BLUE_PAIR));
+    break;
+  case ThrusterState::Up:
+    mvaddch(currentPosition.second + 1, currentPosition.first,
+            '^' | COLOR_PAIR(TRANSPARENT_BLUE_PAIR));
+    mvaddch(currentPosition.second + 2, currentPosition.first,
+            '^' | COLOR_PAIR(TRANSPARENT_BLUE_PAIR));
+    if (currentPosition.second + 2 >= LINES) {
+      mvaddch(LINES - 1, currentPosition.first - 1,
+              '>' | COLOR_PAIR(TRANSPARENT_BLUE_PAIR));
+      mvaddch(LINES - 1, currentPosition.first + 1,
+              '<' | COLOR_PAIR(TRANSPARENT_BLUE_PAIR));
+    }
+    if (currentPosition.second + 1 >= LINES) {
+      mvaddch(LINES - 1, currentPosition.first - 2,
+              '>' | COLOR_PAIR(TRANSPARENT_BLUE_PAIR));
+      mvaddch(LINES - 1, currentPosition.first + 2,
+              '<' | COLOR_PAIR(TRANSPARENT_BLUE_PAIR));
+    }
+    break;
+  case ThrusterState::Off:
+  default:
+    break;
+  }
 }
 
 void TerminalPresenter::drawStats() {
