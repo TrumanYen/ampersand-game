@@ -1,7 +1,9 @@
 #include <algorithm>
 #include <chrono>
+#include <gameLogicContainer.h>
 #include <ncurses.h>
 #include <scaledSimulation.h>
+#include <simulation.h>
 #include <thread>
 
 int main() {
@@ -19,8 +21,7 @@ int main() {
   int statsTextPosition =
       std::max(0, halfX - 24); // yes I counted the number of characters in the
                                // message and hard-coded it.
-  ScaledSimulation scaledSim(maxx, maxy);
-  Simulation &sim = scaledSim.sim();
+  GameLogicContainer container(maxx, maxy);
 
   bool running = true;
   int inputchar;
@@ -39,22 +40,22 @@ int main() {
       }
       switch (mostRecentChar) {
       case 'h':
-        sim.setThrusterState(ThrusterState::Left);
+        container.sim().setThrusterState(ThrusterState::Left);
         break;
       case 'l':
-        sim.setThrusterState(ThrusterState::Right);
+        container.sim().setThrusterState(ThrusterState::Right);
         break;
       case 'j':
-        sim.setThrusterState(ThrusterState::Down);
+        container.sim().setThrusterState(ThrusterState::Down);
         break;
       case 'k':
-        sim.setThrusterState(ThrusterState::Up);
+        container.sim().setThrusterState(ThrusterState::Up);
         break;
       case 'q':
         running = false;
         break;
       default:
-        sim.setThrusterState(ThrusterState::Off);
+        container.sim().setThrusterState(ThrusterState::Off);
         break;
       }
       framesSinceLastProcessedKeypresses = 0;
@@ -62,12 +63,13 @@ int main() {
       framesSinceLastProcessedKeypresses++;
     }
     erase();
-    sim.incrementTimeMs(FRAME_PERIOD_MS);
-    std::pair<int, int> currentPosition = scaledSim.currentPositionCharsXY();
+    container.sim().incrementTimeMs(FRAME_PERIOD_MS);
+    std::pair<int, int> currentPosition =
+        container.scaledSim().currentPositionCharsXY();
     mvaddch(currentPosition.second, currentPosition.first, '@');
-    std::pair<double, double> currentPos = sim.currentPos();
-    std::pair<double, double> currentVel = sim.currentVel();
-    std::pair<double, double> currentAccel = sim.currentAccel();
+    std::pair<double, double> currentPos = container.sim().currentPos();
+    std::pair<double, double> currentVel = container.sim().currentVel();
+    std::pair<double, double> currentAccel = container.sim().currentAccel();
     mvprintw(0, statsTextPosition,
              "Pos: %.3f, %.3f    Vel: %.3f, %.3f   Accel: %.3f, %.3f",
              currentPos.first, currentPos.second, currentVel.first,

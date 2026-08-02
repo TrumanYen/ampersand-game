@@ -20,6 +20,7 @@ target_sources(${ExeName} PRIVATE
   main.cxx
   simulation.cxx
   scaledSimulation.cxx
+  gameLogicContainer.cxx
 )
 
 target_include_directories(${ExeName} PRIVATE 
