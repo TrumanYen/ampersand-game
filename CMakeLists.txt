@@ -22,6 +22,7 @@ target_sources(${ExeName} PRIVATE
   simToTerminalScaler.cxx
   gameLogicContainer.cxx
   terminalPresenter.cxx
+  mapState.cxx
 )
 
 target_include_directories(${ExeName} PRIVATE 
