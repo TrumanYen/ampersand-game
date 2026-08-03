@@ -2,7 +2,7 @@
 
 #include <memory>
 
-class AmpersandSimulation;
+class GameState;
 class SimToTerminalScaler;
 
 class GameLogicContainer {
@@ -10,10 +10,10 @@ public:
   GameLogicContainer(int numCharsX, int numCharsY);
   ~GameLogicContainer();
 
-  AmpersandSimulation &ampersand();
+  GameState &gameState();
   SimToTerminalScaler &simScaler();
 
 private:
-  std::unique_ptr<AmpersandSimulation> ampersand_;
+  std::unique_ptr<GameState> gameState_;
   std::unique_ptr<SimToTerminalScaler> simScaler_;
 };

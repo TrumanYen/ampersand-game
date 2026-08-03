@@ -4,30 +4,28 @@
 
 enum class ThrusterState { Up, Down, Left, Right, Off };
 
+class MapState;
+
 class AmpersandSimulation {
   // All units of distance in meters and frame of reference is right down
 public:
-  AmpersandSimulation();
+  AmpersandSimulation(const MapState &mapState);
   ~AmpersandSimulation();
 
-  void incrementTimeMs(double deltaMs);
+  void incrementTime(double timeSeconds);
   void setThrusterState(ThrusterState state);
-  void setNewAspectRatio(double widthToHeightAspectRatio);
 
-  std::pair<double, double> mapDimensionsWidthHeight() const;
   std::pair<double, double> currentPos() const;
   std::pair<double, double> currentVel() const;
   std::pair<double, double> currentAccel() const;
   ThrusterState currentThrusterState() const;
 
 private:
-  void displaceAmpersand(double deltaX, double deltaY,
-                         double rightWallVelocity);
+  void displaceAmpersand(double deltaX, double deltaY);
   void calculateCurrentAcceleration();
 
 private:
-  double maxX_;
-  double maxY_;
+  const MapState &mapState_;
 
   double xPos_;
   double yPos_;
@@ -37,5 +35,4 @@ private:
   double yAccel_;
 
   ThrusterState thrusterState_;
-  double rightWallDisplacementSinceLastFrame_;
 };

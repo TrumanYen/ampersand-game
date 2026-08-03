@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <mapState.h>
 
 namespace {
 const double MAP_HEIGHT_M = 6.0;
@@ -13,49 +14,30 @@ const double NEGATIVE_TERMINAL_VELOCITY = -1.0 * TERMINAL_VELOCITY;
 
 } // namespace
 
-AmpersandSimulation::AmpersandSimulation()
-    : maxX_(MAP_WIDTH_M_INITIAL_DEFAULT), maxY_(MAP_HEIGHT_M), xPos_(0.0),
-      yPos_(0.0), xVel_(0.0), yVel_(0.0), xAccel_(0.0), yAccel_(0.0),
-      thrusterState_(ThrusterState::Off),
-      rightWallDisplacementSinceLastFrame_(0.0) {}
+AmpersandSimulation::AmpersandSimulation(const MapState &mapState)
+    : mapState_(mapState), xPos_(0.0), yPos_(0.0), xVel_(0.0), yVel_(0.0),
+      xAccel_(0.0), yAccel_(0.0), thrusterState_(ThrusterState::Off) {}
 
 AmpersandSimulation::~AmpersandSimulation() = default;
 
-void AmpersandSimulation::incrementTimeMs(double deltaMs) {
+void AmpersandSimulation::incrementTime(double timeSeconds) {
   calculateCurrentAcceleration();
 
-  double deltaSeconds = 1e-3 * deltaMs;
-
-  double deltaVelX = xAccel_ * deltaSeconds;
-  double deltaVelY = yAccel_ * deltaSeconds;
+  double deltaVelX = xAccel_ * timeSeconds;
+  double deltaVelY = yAccel_ * timeSeconds;
   xVel_ = std::clamp(xVel_ + deltaVelX, NEGATIVE_TERMINAL_VELOCITY,
                      TERMINAL_VELOCITY);
   yVel_ = std::clamp(yVel_ + deltaVelY, NEGATIVE_TERMINAL_VELOCITY,
                      TERMINAL_VELOCITY);
 
-  double deltaX = xVel_ * deltaSeconds;
-  double deltaY = yVel_ * deltaSeconds;
-  double rightWallVelocity =
-      rightWallDisplacementSinceLastFrame_ / deltaSeconds;
+  double deltaX = xVel_ * timeSeconds;
+  double deltaY = yVel_ * timeSeconds;
 
-  displaceAmpersand(deltaX, deltaY, rightWallVelocity);
-  rightWallDisplacementSinceLastFrame_ = 0.0;
+  displaceAmpersand(deltaX, deltaY);
 }
 
 void AmpersandSimulation::setThrusterState(ThrusterState state) {
   thrusterState_ = state;
-}
-
-void AmpersandSimulation::setNewAspectRatio(double widthToHeightAspectRatio) {
-  double updatedMaxX = widthToHeightAspectRatio * MAP_HEIGHT_M;
-  // Only the right wall can move, because the map's height is fixed.
-  rightWallDisplacementSinceLastFrame_ += (updatedMaxX - maxX_);
-  maxX_ = updatedMaxX;
-}
-
-std::pair<double, double>
-AmpersandSimulation::mapDimensionsWidthHeight() const {
-  return std::pair<double, double>(maxX_, maxY_);
 }
 
 std::pair<double, double> AmpersandSimulation::currentPos() const {
@@ -74,22 +56,23 @@ ThrusterState AmpersandSimulation::currentThrusterState() const {
   return thrusterState_;
 }
 
-void AmpersandSimulation::displaceAmpersand(double deltaX, double deltaY,
-                                            double rightWallVelocity) {
+void AmpersandSimulation::displaceAmpersand(double deltaX, double deltaY) {
   // for now we can assume the only collisions are the walls, and that all the
   // walls except the right wall are stationary.
   double desiredXPos = xPos_ + deltaX;
   double desiredYPos = yPos_ + deltaY;
 
   bool collisionDetectedWithLeftWall = desiredXPos < 0.0;
-  bool collisionDetectedWithRightWall = desiredXPos > maxX_;
-  bool verticalCollisionDetected = (desiredYPos < 0.0 || desiredYPos > maxY_);
+  bool collisionDetectedWithRightWall =
+      desiredXPos > mapState_.mapWidthMeters();
+  bool verticalCollisionDetected =
+      (desiredYPos < 0.0 || desiredYPos > mapState_.mapHeightMeters());
 
-  xPos_ = std::clamp(desiredXPos, 0.0, maxX_);
-  yPos_ = std::clamp(desiredYPos, 0.0, maxY_);
+  xPos_ = std::clamp(desiredXPos, 0.0, mapState_.mapWidthMeters());
+  yPos_ = std::clamp(desiredYPos, 0.0, mapState_.mapHeightMeters());
 
   if (collisionDetectedWithRightWall) {
-    xVel_ -= rightWallVelocity;
+    xVel_ -= mapState_.rightWallVelocity();
   }
   if (collisionDetectedWithLeftWall || collisionDetectedWithRightWall) {
     xVel_ = -0.8 * xVel_;

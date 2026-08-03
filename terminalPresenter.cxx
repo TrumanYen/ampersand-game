@@ -1,11 +1,12 @@
 #include <terminalPresenter.h>
 
 #include <algorithm>
+#include <ampersandSimulation.h>
 #include <chrono>
 #include <gameLogicContainer.h>
+#include <gameState.h>
 #include <ncurses.h>
 #include <simToTerminalScaler.h>
-#include <ampersandSimulation.h>
 #include <thread>
 
 #define TRANSPARENT_BLUE_PAIR 1
@@ -50,7 +51,7 @@ void TerminalPresenter::run() {
     } else {
       framesSinceLastProcessedKeypresses++;
     }
-    container_->ampersand().incrementTimeMs(FRAME_PERIOD_MS);
+    container_->gameState().incrementTimeMs(FRAME_PERIOD_MS);
     erase();
     drawAmpersand();
     drawStats();
@@ -89,14 +90,15 @@ void TerminalPresenter::handleKeyPresses() {
       break;
     }
   } while (lastCharReadFromBuffer_ != ERR);
-  container_->ampersand().setThrusterState(commandedThrusterState);
+  container_->gameState().ampersandSim().setThrusterState(
+      commandedThrusterState);
 }
 
 void TerminalPresenter::drawAmpersand() {
   std::pair<int, int> currentPosition =
       container_->simScaler().currentPositionCharsXY();
   ThrusterState currentThrusterState =
-      container_->ampersand().currentThrusterState();
+      container_->gameState().ampersandSim().currentThrusterState();
 
   mvaddch(currentPosition.second, currentPosition.first, '&');
   switch (currentThrusterState) {
@@ -143,10 +145,12 @@ void TerminalPresenter::drawAmpersand() {
 }
 
 void TerminalPresenter::drawStats() {
-  std::pair<double, double> currentPos = container_->ampersand().currentPos();
-  std::pair<double, double> currentVel = container_->ampersand().currentVel();
+  std::pair<double, double> currentPos =
+      container_->gameState().ampersandSim().currentPos();
+  std::pair<double, double> currentVel =
+      container_->gameState().ampersandSim().currentVel();
   std::pair<double, double> currentAccel =
-      container_->ampersand().currentAccel();
+      container_->gameState().ampersandSim().currentAccel();
   mvprintw(0, statsTextPosition_,
            "Pos: %.3f, %.3f    Vel: %.3f, %.3f   Accel: %.3f, %.3f",
            currentPos.first, currentPos.second, currentVel.first,

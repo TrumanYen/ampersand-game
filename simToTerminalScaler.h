@@ -2,12 +2,11 @@
 
 #include <utility>
 
-class AmpersandSimulation;
+class GameState;
 
 class SimToTerminalScaler {
 public:
-  SimToTerminalScaler(int numCharsX, int numCharsY,
-                      AmpersandSimulation &ampersand);
+  SimToTerminalScaler(int numCharsX, int numCharsY, GameState &gameState);
 
   ~SimToTerminalScaler();
 
@@ -15,7 +14,7 @@ public:
   void updateTerminalDimensions(int numCharsX, int numCharsY);
 
 private:
-  AmpersandSimulation &ampersand_;
+  GameState &gameState_;
   int maxXChars_;
   int maxYChars_;
   double simToTerminalScaleX_;

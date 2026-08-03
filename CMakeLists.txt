@@ -23,6 +23,7 @@ target_sources(${ExeName} PRIVATE
   gameLogicContainer.cxx
   terminalPresenter.cxx
   mapState.cxx
+  gameState.cxx
 )
 
 target_include_directories(${ExeName} PRIVATE 
