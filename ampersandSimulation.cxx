@@ -5,9 +5,6 @@
 #include <mapState.h>
 
 namespace {
-const double MAP_HEIGHT_M = 6.0;
-const double MAP_WIDTH_M_INITIAL_DEFAULT = 10.7; // roughly 16:9 ratio
-
 const double THRUSTER_ACCEL_MPSS = 15.0;
 const double TERMINAL_VELOCITY = 20.0;
 const double NEGATIVE_TERMINAL_VELOCITY = -1.0 * TERMINAL_VELOCITY;
@@ -58,27 +55,29 @@ ThrusterState AmpersandSimulation::currentThrusterState() const {
 
 void AmpersandSimulation::displaceAmpersand(double deltaX, double deltaY) {
   // for now we can assume the only collisions are the walls, and that all the
-  // walls except the right wall are stationary.
+  // walls except the floor are stationary.
   double desiredXPos = xPos_ + deltaX;
   double desiredYPos = yPos_ + deltaY;
 
-  bool collisionDetectedWithLeftWall = desiredXPos < 0.0;
-  bool collisionDetectedWithRightWall =
-      desiredXPos > mapState_.mapWidthMeters();
-  bool verticalCollisionDetected =
-      (desiredYPos < 0.0 || desiredYPos > mapState_.mapHeightMeters());
+  bool horizontalCollisionDetected =
+      (desiredXPos < 0.0 || desiredXPos > mapState_.mapWidthMeters());
+  bool ceilingCollisionDetected = desiredYPos < 0.0;
+  bool floorCollisionDetected = desiredYPos > mapState_.mapHeightMeters();
 
   xPos_ = std::clamp(desiredXPos, 0.0, mapState_.mapWidthMeters());
   yPos_ = std::clamp(desiredYPos, 0.0, mapState_.mapHeightMeters());
 
-  if (collisionDetectedWithRightWall) {
-    xVel_ -= mapState_.rightWallVelocity();
-  }
-  if (collisionDetectedWithLeftWall || collisionDetectedWithRightWall) {
+  if (horizontalCollisionDetected) {
     xVel_ = -0.8 * xVel_;
     yVel_ = 0.9 * yVel_;
   }
-  if (verticalCollisionDetected) {
+  if (floorCollisionDetected) {
+    // dividing the floor velocity by two is arbitrary, but it is way too bouncy
+    // if I don't do that.  My guess is that getting the velocity of the floor
+    // by dividing by a small period of time cause math to go boom
+    yVel_ -= 0.5 * mapState_.floorVelocity();
+  }
+  if (ceilingCollisionDetected || floorCollisionDetected) {
     yVel_ = -0.8 * yVel_;
     xVel_ = 0.9 * xVel_;
   }

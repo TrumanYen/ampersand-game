@@ -6,15 +6,15 @@ public:
   ~MapState();
 
   void incrementTime(double timeSeconds);
-  void setNewAspectRatio(double widthToHeightAspectRatio);
+  void setNewAspectRatio(double heightToWidthAspectRatio);
 
   double mapWidthMeters() const;
   double mapHeightMeters() const;
-  double rightWallVelocity() const;
+  double floorVelocity() const;
 
 private:
   double maxX_;
   double maxY_;
-  double rightWallDisplacementSinceLastFrame_;
-  double rightWallVelocity_;
+  double floorDisplacementSinceLastFrame_;
+  double floorVelocity_;
 };

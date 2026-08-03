@@ -28,9 +28,9 @@ void SimToTerminalScaler::updateTerminalDimensions(int numCharsX,
                                                    int numCharsY) {
   maxXChars_ = numCharsX - 1;
   maxYChars_ = numCharsY - 1;
-  double widthToHeightAspectRatio =
-      0.5 * static_cast<double>(numCharsX) / static_cast<double>(numCharsY);
-  gameState_.mapState().setNewAspectRatio(widthToHeightAspectRatio);
+  double heightToWidthAspectRatio =
+      2.0 * static_cast<double>(numCharsY) / static_cast<double>(numCharsX);
+  gameState_.mapState().setNewAspectRatio(heightToWidthAspectRatio);
   simToTerminalScaleX_ =
       static_cast<double>(numCharsX) / gameState_.mapState().mapWidthMeters();
   simToTerminalScaleY_ = 0.5 * simToTerminalScaleX_;
