@@ -2,7 +2,7 @@
 
 #include <memory>
 
-class Simulation;
+class AmpersandSimulation;
 class SimToTerminalScaler;
 
 class GameLogicContainer {
@@ -10,10 +10,10 @@ public:
   GameLogicContainer(int numCharsX, int numCharsY);
   ~GameLogicContainer();
 
-  Simulation &sim();
+  AmpersandSimulation &ampersand();
   SimToTerminalScaler &simScaler();
 
 private:
-  std::unique_ptr<Simulation> sim_;
-  std::unique_ptr<SimToTerminalScaler> scaledSim_;
+  std::unique_ptr<AmpersandSimulation> ampersand_;
+  std::unique_ptr<SimToTerminalScaler> simScaler_;
 };

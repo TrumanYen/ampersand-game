@@ -18,7 +18,7 @@ set_target_properties(${ExeName} PROPERTIES
 target_sources(${ExeName} PRIVATE
 
   main.cxx
-  simulation.cxx
+  ampersandSimulation.cxx
   simToTerminalScaler.cxx
   gameLogicContainer.cxx
   terminalPresenter.cxx

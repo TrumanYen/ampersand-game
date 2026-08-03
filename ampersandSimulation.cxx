@@ -1,4 +1,4 @@
-#include <simulation.h>
+#include <ampersandSimulation.h>
 
 #include <algorithm>
 #include <cmath>
@@ -13,15 +13,15 @@ const double NEGATIVE_TERMINAL_VELOCITY = -1.0 * TERMINAL_VELOCITY;
 
 } // namespace
 
-Simulation::Simulation()
+AmpersandSimulation::AmpersandSimulation()
     : maxX_(MAP_WIDTH_M_INITIAL_DEFAULT), maxY_(MAP_HEIGHT_M), xPos_(0.0),
       yPos_(0.0), xVel_(0.0), yVel_(0.0), xAccel_(0.0), yAccel_(0.0),
       thrusterState_(ThrusterState::Off),
       rightWallDisplacementSinceLastFrame_(0.0) {}
 
-Simulation::~Simulation() = default;
+AmpersandSimulation::~AmpersandSimulation() = default;
 
-void Simulation::incrementTimeMs(double deltaMs) {
+void AmpersandSimulation::incrementTimeMs(double deltaMs) {
   calculateCurrentAcceleration();
 
   double deltaSeconds = 1e-3 * deltaMs;
@@ -42,39 +42,40 @@ void Simulation::incrementTimeMs(double deltaMs) {
   rightWallDisplacementSinceLastFrame_ = 0.0;
 }
 
-void Simulation::setThrusterState(ThrusterState state) {
+void AmpersandSimulation::setThrusterState(ThrusterState state) {
   thrusterState_ = state;
 }
 
-void Simulation::setNewAspectRatio(double widthToHeightAspectRatio) {
+void AmpersandSimulation::setNewAspectRatio(double widthToHeightAspectRatio) {
   double updatedMaxX = widthToHeightAspectRatio * MAP_HEIGHT_M;
   // Only the right wall can move, because the map's height is fixed.
   rightWallDisplacementSinceLastFrame_ += (updatedMaxX - maxX_);
   maxX_ = updatedMaxX;
 }
 
-std::pair<double, double> Simulation::mapDimensionsWidthHeight() const {
+std::pair<double, double>
+AmpersandSimulation::mapDimensionsWidthHeight() const {
   return std::pair<double, double>(maxX_, maxY_);
 }
 
-std::pair<double, double> Simulation::currentPos() const {
+std::pair<double, double> AmpersandSimulation::currentPos() const {
   return std::pair<double, double>(xPos_, yPos_);
 }
 
-std::pair<double, double> Simulation::currentVel() const {
+std::pair<double, double> AmpersandSimulation::currentVel() const {
   return std::pair<double, double>(xVel_, yVel_);
 }
 
-std::pair<double, double> Simulation::currentAccel() const {
+std::pair<double, double> AmpersandSimulation::currentAccel() const {
   return std::pair<double, double>(xAccel_, yAccel_);
 }
 
-ThrusterState Simulation::currentThrusterState() const {
+ThrusterState AmpersandSimulation::currentThrusterState() const {
   return thrusterState_;
 }
 
-void Simulation::displaceAmpersand(double deltaX, double deltaY,
-                                   double rightWallVelocity) {
+void AmpersandSimulation::displaceAmpersand(double deltaX, double deltaY,
+                                            double rightWallVelocity) {
   // for now we can assume the only collisions are the walls, and that all the
   // walls except the right wall are stationary.
   double desiredXPos = xPos_ + deltaX;
@@ -100,7 +101,7 @@ void Simulation::displaceAmpersand(double deltaX, double deltaY,
   }
 }
 
-void Simulation::calculateCurrentAcceleration() {
+void AmpersandSimulation::calculateCurrentAcceleration() {
   // accel should not be a member variable since it gets recalculated every
   // frame anyways
   xAccel_ = 0.0;

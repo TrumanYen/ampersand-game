@@ -5,7 +5,7 @@
 #include <gameLogicContainer.h>
 #include <ncurses.h>
 #include <simToTerminalScaler.h>
-#include <simulation.h>
+#include <ampersandSimulation.h>
 #include <thread>
 
 #define TRANSPARENT_BLUE_PAIR 1
@@ -50,7 +50,7 @@ void TerminalPresenter::run() {
     } else {
       framesSinceLastProcessedKeypresses++;
     }
-    container_->sim().incrementTimeMs(FRAME_PERIOD_MS);
+    container_->ampersand().incrementTimeMs(FRAME_PERIOD_MS);
     erase();
     drawAmpersand();
     drawStats();
@@ -89,13 +89,14 @@ void TerminalPresenter::handleKeyPresses() {
       break;
     }
   } while (lastCharReadFromBuffer_ != ERR);
-  container_->sim().setThrusterState(commandedThrusterState);
+  container_->ampersand().setThrusterState(commandedThrusterState);
 }
 
 void TerminalPresenter::drawAmpersand() {
   std::pair<int, int> currentPosition =
       container_->simScaler().currentPositionCharsXY();
-  ThrusterState currentThrusterState = container_->sim().currentThrusterState();
+  ThrusterState currentThrusterState =
+      container_->ampersand().currentThrusterState();
 
   mvaddch(currentPosition.second, currentPosition.first, '&');
   switch (currentThrusterState) {
@@ -142,9 +143,10 @@ void TerminalPresenter::drawAmpersand() {
 }
 
 void TerminalPresenter::drawStats() {
-  std::pair<double, double> currentPos = container_->sim().currentPos();
-  std::pair<double, double> currentVel = container_->sim().currentVel();
-  std::pair<double, double> currentAccel = container_->sim().currentAccel();
+  std::pair<double, double> currentPos = container_->ampersand().currentPos();
+  std::pair<double, double> currentVel = container_->ampersand().currentVel();
+  std::pair<double, double> currentAccel =
+      container_->ampersand().currentAccel();
   mvprintw(0, statsTextPosition_,
            "Pos: %.3f, %.3f    Vel: %.3f, %.3f   Accel: %.3f, %.3f",
            currentPos.first, currentPos.second, currentVel.first,

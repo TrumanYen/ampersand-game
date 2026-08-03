@@ -4,11 +4,11 @@
 
 enum class ThrusterState { Up, Down, Left, Right, Off };
 
-class Simulation {
+class AmpersandSimulation {
   // All units of distance in meters and frame of reference is right down
 public:
-  Simulation();
-  ~Simulation();
+  AmpersandSimulation();
+  ~AmpersandSimulation();
 
   void incrementTimeMs(double deltaMs);
   void setThrusterState(ThrusterState state);
