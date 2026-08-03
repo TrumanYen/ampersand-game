@@ -9,11 +9,12 @@ class Simulation {
 public:
   Simulation(double widthToHeightAspectRatio);
   ~Simulation();
-
+  // TODO: rearrange order of pubic functions
   std::pair<double, double> mapDimensionsWidthHeight();
   void incrementTimeMs(double deltaMs);
 
   void setThrusterState(ThrusterState state);
+  void setNewAspectRatio(double widthToHeightAspectRatio);
 
   std::pair<double, double> currentPos();
   std::pair<double, double> currentVel();
@@ -21,7 +22,8 @@ public:
   ThrusterState currentThrusterState();
 
 private:
-  void displaceAmpersand(double deltaX, double deltaY);
+  void displaceAmpersand(double deltaX, double deltaY,
+                         double rightWallVelocity);
   void calculateCurrentAcceleration();
 
 private:
@@ -36,4 +38,5 @@ private:
   double yAccel_;
 
   ThrusterState thrusterState_;
+  double rightWallDisplacementSinceLastFrame_;
 };

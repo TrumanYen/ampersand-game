@@ -11,6 +11,7 @@ public:
   ~SimToTerminalScaler();
 
   std::pair<int, int> currentPositionCharsXY();
+  void terminalDimensionsChanged(int numCharsX, int numCharsY);
 
 private:
   int maxXChars_;

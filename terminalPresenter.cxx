@@ -22,6 +22,7 @@ TerminalPresenter::TerminalPresenter() {
   nodelay(stdscr, TRUE);
   noecho();
   curs_set(0);
+  keypad(stdscr, TRUE);
   start_color();
   use_default_colors();
   init_pair(TRANSPARENT_BLUE_PAIR, COLOR_BLUE, -1);
@@ -62,31 +63,33 @@ void TerminalPresenter::run() {
 }
 
 void TerminalPresenter::handleKeyPresses() {
-  mostRecentValidChar_ = ERR;
-  while ((lastCharReadFromBuffer_ = getch()) != ERR) {
-    // purge buffer and just get the most recent value
-    mostRecentValidChar_ = lastCharReadFromBuffer_;
-  }
-  switch (mostRecentValidChar_) {
-  case 'h':
-    container_->sim().setThrusterState(ThrusterState::Left);
-    break;
-  case 'l':
-    container_->sim().setThrusterState(ThrusterState::Right);
-    break;
-  case 'j':
-    container_->sim().setThrusterState(ThrusterState::Down);
-    break;
-  case 'k':
-    container_->sim().setThrusterState(ThrusterState::Up);
-    break;
-  case 'q':
-    running_ = false;
-    break;
-  default:
-    container_->sim().setThrusterState(ThrusterState::Off);
-    break;
-  }
+  // There may be many read from the buffer.  We should process all of them.
+  ThrusterState commandedThrusterState = ThrusterState::Off;
+  do {
+    lastCharReadFromBuffer_ = getch();
+    switch (lastCharReadFromBuffer_) {
+    case 'h':
+      commandedThrusterState = ThrusterState::Left;
+      break;
+    case 'l':
+      commandedThrusterState = ThrusterState::Right;
+      break;
+    case 'j':
+      commandedThrusterState = ThrusterState::Down;
+      break;
+    case 'k':
+      commandedThrusterState = ThrusterState::Up;
+      break;
+    case 'q':
+      running_ = false;
+      break;
+    case KEY_RESIZE:
+      container_->simScaler().terminalDimensionsChanged(COLS, LINES);
+    default:
+      break;
+    }
+  } while (lastCharReadFromBuffer_ != ERR);
+  container_->sim().setThrusterState(commandedThrusterState);
 }
 
 void TerminalPresenter::drawAmpersand() {

@@ -25,3 +25,18 @@ std::pair<int, int> SimToTerminalScaler::currentPositionCharsXY() {
 
   return std::pair<int, int>(posXBounded, posYBounded);
 }
+
+void SimToTerminalScaler::terminalDimensionsChanged(int numCharsX,
+                                                    int numCharsY) {
+  // TODO: deduplicate with constructor.  This is a mess.
+  maxXChars_ = numCharsX - 1;
+  maxYChars_ = numCharsY - 1;
+  // this is duplicated with the helper that I totally didn't put in
+  // GameLogicContainer.. should consolidate.
+  double widthToHeightAspectRatio =
+      0.5 * static_cast<double>(numCharsX) / static_cast<double>(numCharsY);
+  sim_.setNewAspectRatio(widthToHeightAspectRatio);
+  std::pair<double, double> mapDimensions = sim_.mapDimensionsWidthHeight();
+  simToTerminalScaleX_ = static_cast<double>(numCharsX) / mapDimensions.first;
+  simToTerminalScaleY_ = 0.5 * simToTerminalScaleX_;
+}

@@ -15,7 +15,8 @@ static const double NEGATIVE_TERMINAL_VELOCITY = -1.0 * TERMINAL_VELOCITY;
 Simulation::Simulation(double widthToHeightAspectRatio)
     : maxX_(widthToHeightAspectRatio * MAP_HEIGHT_M), maxY_(MAP_HEIGHT_M),
       xPos_(0.0), yPos_(0.0), xVel_(0.0), yVel_(0.0), xAccel_(0.0),
-      yAccel_(0.0) {}
+      yAccel_(0.0), thrusterState_(ThrusterState::Off),
+      rightWallDisplacementSinceLastFrame_(0.0) {}
 
 Simulation::~Simulation() = default;
 
@@ -37,12 +38,22 @@ void Simulation::incrementTimeMs(double deltaMs) {
 
   double deltaX = xVel_ * deltaSeconds;
   double deltaY = yVel_ * deltaSeconds;
+  double rightWallVelocity =
+      rightWallDisplacementSinceLastFrame_ / deltaSeconds;
 
-  displaceAmpersand(deltaX, deltaY);
+  displaceAmpersand(deltaX, deltaY, rightWallVelocity);
+  rightWallDisplacementSinceLastFrame_ = 0.0;
 }
 
 void Simulation::setThrusterState(ThrusterState state) {
   thrusterState_ = state;
+}
+
+void Simulation::setNewAspectRatio(double widthToHeightAspectRatio) {
+  double updatedMaxX = widthToHeightAspectRatio * MAP_HEIGHT_M;
+  // Only the right wall can move, because the map's height is fixed.
+  rightWallDisplacementSinceLastFrame_ += (updatedMaxX - maxX_);
+  maxX_ = updatedMaxX;
 }
 
 std::pair<double, double> Simulation::currentPos() {
@@ -59,18 +70,24 @@ std::pair<double, double> Simulation::currentAccel() {
 
 ThrusterState Simulation::currentThrusterState() { return thrusterState_; }
 
-void Simulation::displaceAmpersand(double deltaX, double deltaY) {
-  // for now we can assume the only collisions are the walls
+void Simulation::displaceAmpersand(double deltaX, double deltaY,
+                                   double rightWallVelocity) {
+  // for now we can assume the only collisions are the walls, and that all the
+  // walls except the right wall are stationary.
   double desiredXPos = xPos_ + deltaX;
   double desiredYPos = yPos_ + deltaY;
 
-  bool horizontalCollisionDetected = (desiredXPos < 0.0 || desiredXPos > maxX_);
+  bool collisionDetectedWithLeftWall = desiredXPos < 0.0;
+  bool collisionDetectedWithRightWall = desiredXPos > maxX_;
   bool verticalCollisionDetected = (desiredYPos < 0.0 || desiredYPos > maxY_);
 
   xPos_ = std::clamp(desiredXPos, 0.0, maxX_);
   yPos_ = std::clamp(desiredYPos, 0.0, maxY_);
 
-  if (horizontalCollisionDetected) {
+  if (collisionDetectedWithRightWall) {
+    xVel_ -= rightWallVelocity;
+  }
+  if (collisionDetectedWithLeftWall || collisionDetectedWithRightWall) {
     xVel_ = -0.8 * xVel_;
     yVel_ = 0.9 * yVel_;
   }
