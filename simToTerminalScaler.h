@@ -11,13 +11,12 @@ public:
   ~SimToTerminalScaler();
 
   std::pair<int, int> currentPositionCharsXY();
-  void terminalDimensionsChanged(int numCharsX, int numCharsY);
+  void updateTerminalDimensions(int numCharsX, int numCharsY);
 
 private:
+  Simulation &sim_;
   int maxXChars_;
   int maxYChars_;
   double simToTerminalScaleX_;
   double simToTerminalScaleY_;
-
-  Simulation &sim_;
 };

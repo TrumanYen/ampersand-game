@@ -84,7 +84,7 @@ void TerminalPresenter::handleKeyPresses() {
       running_ = false;
       break;
     case KEY_RESIZE:
-      container_->simScaler().terminalDimensionsChanged(COLS, LINES);
+      container_->simScaler().updateTerminalDimensions(COLS, LINES);
     default:
       break;
     }

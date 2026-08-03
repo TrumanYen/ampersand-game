@@ -7,9 +7,10 @@ enum class ThrusterState { Up, Down, Left, Right, Off };
 class Simulation {
   // All units of distance in meters and frame of reference is right down
 public:
-  Simulation(double widthToHeightAspectRatio);
+  Simulation();
   ~Simulation();
-  // TODO: rearrange order of pubic functions
+
+  // TODO: rearrange order of public functions and set const ones as const
   std::pair<double, double> mapDimensionsWidthHeight();
   void incrementTimeMs(double deltaMs);
 
