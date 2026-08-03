@@ -24,6 +24,7 @@ target_sources(${ExeName} PRIVATE
   terminalPresenter.cxx
   mapState.cxx
   gameState.cxx
+  ncursesStyleManager.cxx
 )
 
 target_include_directories(${ExeName} PRIVATE 

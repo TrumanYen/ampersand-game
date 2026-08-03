@@ -5,13 +5,9 @@
 #include <chrono>
 #include <gameLogicContainer.h>
 #include <gameState.h>
-#include <ncurses.h>
+#include <ncursesStyleManager.h>
 #include <simToTerminalScaler.h>
 #include <thread>
-
-#define TRANSPARENT_BLUE_PAIR 1
-#define TRANSPARENT_RED_PAIR 2
-#define TRANSPARENT_GREEN_PAIR 3
 
 namespace {
 const int TARGET_FPS = 60;
@@ -26,15 +22,11 @@ TerminalPresenter::TerminalPresenter() {
   noecho();
   curs_set(0);
   keypad(stdscr, TRUE);
-  start_color();
-  use_default_colors();
-  init_pair(TRANSPARENT_BLUE_PAIR, COLOR_BLUE, -1);
-  init_pair(TRANSPARENT_RED_PAIR, COLOR_RED, -1);
-  init_pair(TRANSPARENT_GREEN_PAIR, COLOR_GREEN, -1);
   // Unfortunately need to instantiate this container here for now because we do
   // not yet have the ability to dynamically resize, so we need to receive the
   // aspect ratio on construction
   container_ = std::make_unique<GameLogicContainer>(COLS, LINES);
+  styles_ = std::make_unique<NcursesStyleManager>();
   statsTextPosition_ = std::max(0, (COLS / 2) - 24);
   running_ = false;
 }
@@ -59,11 +51,11 @@ void TerminalPresenter::run() {
     erase();
     drawAmpersand(container_->simScaler().currentPositionCharsXY(),
                   container_->gameState().ampersandSim().currentThrusterState(),
-                  TRANSPARENT_GREEN_PAIR);
+                  styles_->green());
     drawAmpersand(
         container_->simScaler().enemyCurrentPositionCharsXY(),
         container_->gameState().enemyAmpersandSim().currentThrusterState(),
-        TRANSPARENT_RED_PAIR);
+        styles_->red());
     drawStats();
     refresh();
     // Quick and dirty timing loop.  Should thread properly later
@@ -105,43 +97,33 @@ void TerminalPresenter::handleKeyPresses() {
 }
 
 void TerminalPresenter::drawAmpersand(std::pair<int, int> location,
-                                      ThrusterState thrusterState, int color) {
-  mvaddch(location.second, location.first, '&' | COLOR_PAIR(color));
+                                      ThrusterState thrusterState,
+                                      chtype style) {
+  mvaddch(location.second, location.first, '&' | style);
+  chtype blue = styles_->blue();
   switch (thrusterState) {
   case ThrusterState::Left:
-    mvaddch(location.second, location.first + 1,
-            '<' | COLOR_PAIR(TRANSPARENT_BLUE_PAIR));
-    mvaddch(location.second, location.first + 2,
-            '<' | COLOR_PAIR(TRANSPARENT_BLUE_PAIR));
+    mvaddch(location.second, location.first + 1, '<' | blue);
+    mvaddch(location.second, location.first + 2, '<' | blue);
     break;
   case ThrusterState::Right:
-    mvaddch(location.second, location.first - 1,
-            '>' | COLOR_PAIR(TRANSPARENT_BLUE_PAIR));
-    mvaddch(location.second, location.first - 2,
-            '>' | COLOR_PAIR(TRANSPARENT_BLUE_PAIR));
+    mvaddch(location.second, location.first - 1, '>' | blue);
+    mvaddch(location.second, location.first - 2, '>' | blue);
     break;
   case ThrusterState::Down:
-    mvaddch(location.second - 1, location.first,
-            'v' | COLOR_PAIR(TRANSPARENT_BLUE_PAIR));
-    mvaddch(location.second - 2, location.first,
-            'v' | COLOR_PAIR(TRANSPARENT_BLUE_PAIR));
+    mvaddch(location.second - 1, location.first, 'v' | blue);
+    mvaddch(location.second - 2, location.first, 'v' | blue);
     break;
   case ThrusterState::Up:
-    mvaddch(location.second + 1, location.first,
-            '^' | COLOR_PAIR(TRANSPARENT_BLUE_PAIR));
-    mvaddch(location.second + 2, location.first,
-            '^' | COLOR_PAIR(TRANSPARENT_BLUE_PAIR));
+    mvaddch(location.second + 1, location.first, '^' | blue);
+    mvaddch(location.second + 2, location.first, '^' | blue);
     if (location.second + 2 >= LINES) {
-      mvaddch(LINES - 1, location.first - 1,
-              '>' | COLOR_PAIR(TRANSPARENT_BLUE_PAIR));
-      mvaddch(LINES - 1, location.first + 1,
-              '<' | COLOR_PAIR(TRANSPARENT_BLUE_PAIR));
+      mvaddch(LINES - 1, location.first - 1, '>' | blue);
+      mvaddch(LINES - 1, location.first + 1, '<' | blue);
     }
     if (location.second + 1 >= LINES) {
-      mvaddch(LINES - 1, location.first - 2,
-              '>' | COLOR_PAIR(TRANSPARENT_BLUE_PAIR));
-      mvaddch(LINES - 1, location.first + 2,
-              '<' | COLOR_PAIR(TRANSPARENT_BLUE_PAIR));
+      mvaddch(LINES - 1, location.first - 2, '>' | blue);
+      mvaddch(LINES - 1, location.first + 2, '<' | blue);
     }
     break;
   case ThrusterState::Off:
