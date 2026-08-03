@@ -21,10 +21,6 @@ Simulation::Simulation()
 
 Simulation::~Simulation() = default;
 
-std::pair<double, double> Simulation::mapDimensionsWidthHeight() {
-  return std::pair<double, double>(maxX_, maxY_);
-}
-
 void Simulation::incrementTimeMs(double deltaMs) {
   calculateCurrentAcceleration();
 
@@ -57,19 +53,25 @@ void Simulation::setNewAspectRatio(double widthToHeightAspectRatio) {
   maxX_ = updatedMaxX;
 }
 
-std::pair<double, double> Simulation::currentPos() {
+std::pair<double, double> Simulation::mapDimensionsWidthHeight() const {
+  return std::pair<double, double>(maxX_, maxY_);
+}
+
+std::pair<double, double> Simulation::currentPos() const {
   return std::pair<double, double>(xPos_, yPos_);
 }
 
-std::pair<double, double> Simulation::currentVel() {
+std::pair<double, double> Simulation::currentVel() const {
   return std::pair<double, double>(xVel_, yVel_);
 }
 
-std::pair<double, double> Simulation::currentAccel() {
+std::pair<double, double> Simulation::currentAccel() const {
   return std::pair<double, double>(xAccel_, yAccel_);
 }
 
-ThrusterState Simulation::currentThrusterState() { return thrusterState_; }
+ThrusterState Simulation::currentThrusterState() const {
+  return thrusterState_;
+}
 
 void Simulation::displaceAmpersand(double deltaX, double deltaY,
                                    double rightWallVelocity) {

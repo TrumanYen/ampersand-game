@@ -10,17 +10,15 @@ public:
   Simulation();
   ~Simulation();
 
-  // TODO: rearrange order of public functions and set const ones as const
-  std::pair<double, double> mapDimensionsWidthHeight();
   void incrementTimeMs(double deltaMs);
-
   void setThrusterState(ThrusterState state);
   void setNewAspectRatio(double widthToHeightAspectRatio);
 
-  std::pair<double, double> currentPos();
-  std::pair<double, double> currentVel();
-  std::pair<double, double> currentAccel();
-  ThrusterState currentThrusterState();
+  std::pair<double, double> mapDimensionsWidthHeight() const;
+  std::pair<double, double> currentPos() const;
+  std::pair<double, double> currentVel() const;
+  std::pair<double, double> currentAccel() const;
+  ThrusterState currentThrusterState() const;
 
 private:
   void displaceAmpersand(double deltaX, double deltaY,
