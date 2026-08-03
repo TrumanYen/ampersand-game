@@ -72,10 +72,7 @@ void AmpersandSimulation::displaceAmpersand(double deltaX, double deltaY) {
     yVel_ = 0.9 * yVel_;
   }
   if (floorCollisionDetected) {
-    // dividing the floor velocity by two is arbitrary, but it is way too bouncy
-    // if I don't do that.  My guess is that getting the velocity of the floor
-    // by dividing by a small period of time cause math to go boom
-    yVel_ -= 0.5 * mapState_.floorVelocity();
+    yVel_ -= mapState_.floorVelocity();
   }
   if (ceilingCollisionDetected || floorCollisionDetected) {
     yVel_ = -0.8 * yVel_;
