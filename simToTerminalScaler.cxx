@@ -13,15 +13,10 @@ SimToTerminalScaler::SimToTerminalScaler(int numCharsX, int numCharsY,
 SimToTerminalScaler::~SimToTerminalScaler() = default;
 
 std::pair<int, int> SimToTerminalScaler::currentPositionCharsXY() {
-  std::pair<double, double> currentPosMeters =
-      gameState_.ampersandSim().currentPos();
-
-  int posXUnbounded = currentPosMeters.first * simToTerminalScaleX_;
-  int posYUnbounded = currentPosMeters.second * simToTerminalScaleY_;
-  int posXBounded = std::clamp(posXUnbounded, 0, maxXChars_);
-  int posYBounded = std::clamp(posYUnbounded, 0, maxYChars_);
-
-  return std::pair<int, int>(posXBounded, posYBounded);
+  return ampersandPositionCharsXY(gameState_.ampersandSim());
+}
+std::pair<int, int> SimToTerminalScaler::enemyCurrentPositionCharsXY() {
+  return ampersandPositionCharsXY(gameState_.enemyAmpersandSim());
 }
 
 void SimToTerminalScaler::updateTerminalDimensions(int numCharsX,
@@ -34,4 +29,17 @@ void SimToTerminalScaler::updateTerminalDimensions(int numCharsX,
   simToTerminalScaleX_ =
       static_cast<double>(numCharsX) / gameState_.mapState().mapWidthMeters();
   simToTerminalScaleY_ = 0.5 * simToTerminalScaleX_;
+}
+
+std::pair<int, int> SimToTerminalScaler::ampersandPositionCharsXY(
+    const AmpersandSimulation &ampersand) {
+
+  std::pair<double, double> currentPosMeters = ampersand.currentPos();
+
+  int posXUnbounded = currentPosMeters.first * simToTerminalScaleX_;
+  int posYUnbounded = currentPosMeters.second * simToTerminalScaleY_;
+  int posXBounded = std::clamp(posXUnbounded, 0, maxXChars_);
+  int posYBounded = std::clamp(posYUnbounded, 0, maxYChars_);
+
+  return std::pair<int, int>(posXBounded, posYBounded);
 }

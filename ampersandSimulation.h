@@ -9,7 +9,8 @@ class MapState;
 class AmpersandSimulation {
   // All units of distance in meters and frame of reference is right down
 public:
-  AmpersandSimulation(const MapState &mapState);
+  AmpersandSimulation(const MapState &mapState,
+                      std::pair<double, double> spawnPoint);
   ~AmpersandSimulation();
 
   void incrementTime(double timeSeconds);

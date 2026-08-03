@@ -1,5 +1,7 @@
 #pragma once
 
+#include <utility>
+
 class MapState {
 public:
   MapState();
@@ -11,6 +13,8 @@ public:
   double mapWidthMeters() const;
   double mapHeightMeters() const;
   double floorVelocity() const;
+  std::pair<double, double> topLeft() const;
+  std::pair<double, double> topRight() const;
 
 private:
   double maxX_;

@@ -1,8 +1,10 @@
 #pragma once
 
 #include <memory>
+#include <utility>
 
 class GameLogicContainer;
+enum class ThrusterState;
 
 class TerminalPresenter {
 public:
@@ -13,7 +15,9 @@ public:
 
 private:
   void handleKeyPresses();
-  void drawAmpersand();
+  void drawAmpersand(
+      std::pair<int, int> location, ThrusterState thrusterState,
+      int color); // TODO: turn color into an enum or something more readable
   void drawStats();
 
 private:

@@ -11,9 +11,11 @@ const double NEGATIVE_TERMINAL_VELOCITY = -1.0 * TERMINAL_VELOCITY;
 
 } // namespace
 
-AmpersandSimulation::AmpersandSimulation(const MapState &mapState)
-    : mapState_(mapState), xPos_(0.0), yPos_(0.0), xVel_(0.0), yVel_(0.0),
-      xAccel_(0.0), yAccel_(0.0), thrusterState_(ThrusterState::Off) {}
+AmpersandSimulation::AmpersandSimulation(const MapState &mapState,
+                                         std::pair<double, double> spawnPoint)
+    : mapState_(mapState), xPos_(spawnPoint.first), yPos_(spawnPoint.second),
+      xVel_(0.0), yVel_(0.0), xAccel_(0.0), yAccel_(0.0),
+      thrusterState_(ThrusterState::Off) {}
 
 AmpersandSimulation::~AmpersandSimulation() = default;
 

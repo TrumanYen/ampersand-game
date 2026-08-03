@@ -29,3 +29,11 @@ double MapState::mapWidthMeters() const { return maxX_; }
 double MapState::mapHeightMeters() const { return maxY_; }
 
 double MapState::floorVelocity() const { return floorVelocity_; }
+
+std::pair<double, double> MapState::topLeft() const {
+  return std::pair<double, double>(0.0, 0.0);
+}
+
+std::pair<double, double> MapState::topRight() const {
+  return std::pair<double, double>(maxX_, 0.0);
+}
