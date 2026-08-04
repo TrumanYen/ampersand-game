@@ -37,6 +37,6 @@ void UseCase::setNewAspectRatio(double heightToWidthRatio) {
 }
 
 void UseCase::incrementTime(double timeSeconds) {
-  enemyPilot_->update();
+  enemyPilot_->update(timeSeconds);
   domain_.incrementTime(timeSeconds);
 }

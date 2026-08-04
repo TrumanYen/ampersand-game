@@ -4,31 +4,62 @@
 #include <domain/ampersandSimulation.h>
 #include <domain/thrusterState.h>
 
+namespace {
+const double POSITIVE_DELTA_ERROR_CUTOFF = 3.0;
+const double NEGATIVE_DELTA_ERROR_CUTOFF = -1.0 * POSITIVE_DELTA_ERROR_CUTOFF;
+
+std::pair<double, double> operator-(std::pair<double, double> a,
+                                    std::pair<double, double> b) {
+  return std::pair<double, double>(a.first - b.first, a.second - b.second);
+}
+
+std::pair<double, double> operator/(std::pair<double, double> a, double b) {
+  return std::pair<double, double>(a.first / b, a.second / b);
+}
+} // namespace
+
 EnemyPilot::EnemyPilot(const AmpersandSimulation &playerAmpersand,
                        AmpersandSimulation &enemyAmpersand)
     : playerAmpersand_(playerAmpersand), enemyAmpersand_(enemyAmpersand) {}
 
 EnemyPilot::~EnemyPilot() = default;
 
-void EnemyPilot::update() {
-  std::pair<double, double> playerLocation = playerAmpersand_.currentPos();
-  std::pair<double, double> enemyLocation = enemyAmpersand_.currentPos();
+void EnemyPilot::update(double secondsElapsed) {
+  std::pair<double, double> error =
+      enemyAmpersand_.currentPos() - playerAmpersand_.currentPos();
 
-  double errorX = enemyLocation.first - playerLocation.first;
-  double errorY = enemyLocation.second - playerLocation.second;
-  // World's most naiive control loop.  Surprisingly works kind of ok.
-  bool shouldMoveHorizontally = (std::abs(errorX) >= std::abs(errorY));
+  double errorXMag = std::abs(error.first);
+  double errorYMag = std::abs(error.second);
+
+  std::pair<double, double> deltaError = error - previousError_;
+  previousError_ = error;
+  std::pair<double, double> deltaErrorOverTime = deltaError / secondsElapsed;
+
+  // because we can only fire the thruster in one direction at a time, we
+  // need to prioritize the axis with the most error.
+  bool shouldMoveHorizontally = (errorXMag > errorYMag);
+  ThrusterState thrusterState = ThrusterState::Off;
   if (shouldMoveHorizontally) {
-    if (errorX > 0) {
-      enemyAmpersand_.setThrusterState(ThrusterState::Left);
+    if (error.first > 0) {
+      if (deltaErrorOverTime.first > NEGATIVE_DELTA_ERROR_CUTOFF) {
+        thrusterState = ThrusterState::Left;
+      }
     } else {
-      enemyAmpersand_.setThrusterState(ThrusterState::Right);
+      if (deltaErrorOverTime.first < POSITIVE_DELTA_ERROR_CUTOFF) {
+        thrusterState = ThrusterState::Right;
+      }
     }
   } else {
-    if (errorY > 0) {
-      enemyAmpersand_.setThrusterState(ThrusterState::Up);
+    if (error.second > 0) {
+      // Maybe it's too hard to overshoot up anywyas? do we need this?
+      if (deltaErrorOverTime.second > NEGATIVE_DELTA_ERROR_CUTOFF) {
+        thrusterState = ThrusterState::Up;
+      }
     } else {
-      enemyAmpersand_.setThrusterState(ThrusterState::Down);
+      if (deltaErrorOverTime.second < POSITIVE_DELTA_ERROR_CUTOFF) {
+        thrusterState = ThrusterState::Down;
+      }
     }
   }
+  enemyAmpersand_.setThrusterState(thrusterState);
 }
