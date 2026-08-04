@@ -1,8 +1,8 @@
 #include <algorithm>
 #include <ampersandSimulation.h>
 #include <mapState.h>
-#include <viewModel.h>
 #include <simulationDomain.h>
+#include <viewModel.h>
 
 ViewModel::ViewModel(SimulationDomain &simulationDomain)
     : maxXChars_(0), maxYChars_(0), simToTerminalScaleX_(0.0),
@@ -10,10 +10,10 @@ ViewModel::ViewModel(SimulationDomain &simulationDomain)
 
 ViewModel::~ViewModel() = default;
 
-std::pair<int, int> ViewModel::currentPositionCharsXY() {
+std::pair<int, int> ViewModel::currentPositionCharsXY() const {
   return ampersandPositionCharsXY(simulationDomain_.ampersandSim());
 }
-std::pair<int, int> ViewModel::enemyCurrentPositionCharsXY() {
+std::pair<int, int> ViewModel::enemyCurrentPositionCharsXY() const {
   return ampersandPositionCharsXY(simulationDomain_.enemyAmpersandSim());
 }
 
@@ -28,8 +28,8 @@ void ViewModel::updateTerminalDimensions(int numCharsX, int numCharsY) {
   simToTerminalScaleY_ = 0.5 * simToTerminalScaleX_;
 }
 
-std::pair<int, int>
-ViewModel::ampersandPositionCharsXY(const AmpersandSimulation &ampersand) {
+std::pair<int, int> ViewModel::ampersandPositionCharsXY(
+    const AmpersandSimulation &ampersand) const {
 
   std::pair<double, double> currentPosMeters = ampersand.currentPos();
 
