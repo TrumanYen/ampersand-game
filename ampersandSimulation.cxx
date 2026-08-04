@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <cmath>
 #include <mapState.h>
+#include <thrusterState.h>
 
 namespace {
 const double THRUSTER_ACCEL_MPSS = 15.0;

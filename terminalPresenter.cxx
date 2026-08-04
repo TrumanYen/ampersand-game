@@ -1,9 +1,9 @@
 #include <terminalPresenter.h>
 
-#include <ampersandSimulation.h> // need this for now because ThrusterState is in there
 #include <chrono>
 #include <ncursesStyleManager.h>
 #include <thread>
+#include <thrusterState.h>
 #include <viewModel.h>
 
 namespace {

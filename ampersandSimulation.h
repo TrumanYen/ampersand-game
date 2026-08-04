@@ -2,8 +2,7 @@
 
 #include <utility>
 
-enum class ThrusterState { Up, Down, Left, Right, Off };
-
+enum class ThrusterState;
 class MapState;
 
 class AmpersandSimulation {
