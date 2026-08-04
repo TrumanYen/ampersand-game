@@ -18,7 +18,7 @@ set_target_properties(${ExeName} PROPERTIES
 target_sources(${ExeName} PRIVATE
 
   main.cxx
-  gameLogicContainer.cxx
+  ampersandGameContainer.cxx
   external/terminalPresenter.cxx
   external/ncursesStyleManager.cxx
   adapter/viewModel.cxx

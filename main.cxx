@@ -1,9 +1,9 @@
+#include <ampersandGameContainer.h>
 #include <external/terminalPresenter.h>
-#include <gameLogicContainer.h>
 
 int main() {
 
-  GameLogicContainer container;
+  AmpersandGameContainer container;
   container.presenter().run();
   return 0;
 }

@@ -7,10 +7,10 @@ class TerminalPresenter;
 class UseCase;
 class ViewModel;
 
-class GameLogicContainer {
+class AmpersandGameContainer {
 public:
-  GameLogicContainer();
-  ~GameLogicContainer();
+  AmpersandGameContainer();
+  ~AmpersandGameContainer();
 
   TerminalPresenter &presenter();
 
