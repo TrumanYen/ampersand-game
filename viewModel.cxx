@@ -13,8 +13,17 @@ ViewModel::~ViewModel() = default;
 std::pair<int, int> ViewModel::currentPositionCharsXY() const {
   return ampersandPositionCharsXY(simulationDomain_.ampersandSim());
 }
+
 std::pair<int, int> ViewModel::enemyCurrentPositionCharsXY() const {
   return ampersandPositionCharsXY(simulationDomain_.enemyAmpersandSim());
+}
+
+ThrusterState ViewModel::enemyCurrentThrusterState() const {
+  return simulationDomain_.enemyAmpersandSim().currentThrusterState();
+}
+
+ThrusterState ViewModel::currentThrusterState() const {
+  return simulationDomain_.ampersandSim().currentThrusterState();
 }
 
 void ViewModel::updateTerminalDimensions(int numCharsX, int numCharsY) {
@@ -26,6 +35,15 @@ void ViewModel::updateTerminalDimensions(int numCharsX, int numCharsY) {
   simToTerminalScaleX_ = static_cast<double>(numCharsX) /
                          simulationDomain_.mapState().mapWidthMeters();
   simToTerminalScaleY_ = 0.5 * simToTerminalScaleX_;
+}
+
+void ViewModel::incrementTimeMs(int milliseconds) {
+  double timeDeltaSeconds = 1e-3 * static_cast<double>(milliseconds);
+  simulationDomain_.incrementTime(timeDeltaSeconds);
+}
+
+void ViewModel::setThrusterState(ThrusterState state) {
+  simulationDomain_.ampersandSim().setThrusterState(state);
 }
 
 std::pair<int, int> ViewModel::ampersandPositionCharsXY(

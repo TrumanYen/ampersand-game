@@ -12,8 +12,7 @@ SimulationDomain::SimulationDomain()
 
 SimulationDomain::~SimulationDomain() {}
 
-void SimulationDomain::incrementTimeMs(double timeDeltaMs) {
-  double timeDeltaSeconds = 1e-3 * timeDeltaMs;
+void SimulationDomain::incrementTime(double timeDeltaSeconds) {
   mapState_->incrementTime(timeDeltaSeconds);
   ampersandSim_->incrementTime(timeDeltaSeconds);
   enemyAmpersandSim_->incrementTime(timeDeltaSeconds);

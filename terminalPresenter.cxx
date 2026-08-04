@@ -1,13 +1,10 @@
 #include <terminalPresenter.h>
 
-#include <algorithm>
-#include <ampersandSimulation.h>
+#include <ampersandSimulation.h> // need this for now because ThrusterState is in there
 #include <chrono>
-#include <gameLogicContainer.h>
-#include <simulationDomain.h>
 #include <ncursesStyleManager.h>
-#include <viewModel.h>
 #include <thread>
+#include <viewModel.h>
 
 namespace {
 const int TARGET_FPS = 60;
@@ -16,7 +13,8 @@ const int TARGET_KEYPRESS_CAPTURE_FREQ = 10;
 const int FRAMES_PER_KEYPRESS_READ = TARGET_FPS / TARGET_KEYPRESS_CAPTURE_FREQ;
 } // namespace
 
-TerminalPresenter::TerminalPresenter() {
+TerminalPresenter::TerminalPresenter(ViewModel &viewModel)
+    : viewModel_(viewModel) {
   initscr();
   nodelay(stdscr, TRUE);
   noecho();
@@ -25,16 +23,14 @@ TerminalPresenter::TerminalPresenter() {
   // Unfortunately need to instantiate this container here for now because we do
   // not yet have the ability to dynamically resize, so we need to receive the
   // aspect ratio on construction
-  container_ = std::make_unique<GameLogicContainer>();
   styles_ = std::make_unique<NcursesStyleManager>();
-  statsTextPosition_ = std::max(0, (COLS / 2) - 24);
   running_ = false;
 }
 
 TerminalPresenter::~TerminalPresenter() {}
 
 void TerminalPresenter::run() {
-  container_->viewModel().updateTerminalDimensions(COLS, LINES);
+  viewModel_.updateTerminalDimensions(COLS, LINES);
   running_ = true;
   int framesSinceLastProcessedKeypresses = 0;
 
@@ -48,16 +44,12 @@ void TerminalPresenter::run() {
     } else {
       framesSinceLastProcessedKeypresses++;
     }
-    container_->simulationDomain().incrementTimeMs(FRAME_PERIOD_MS);
+    viewModel_.incrementTimeMs(FRAME_PERIOD_MS);
     erase();
-    drawAmpersand(container_->viewModel().currentPositionCharsXY(),
-                  container_->simulationDomain().ampersandSim().currentThrusterState(),
-                  styles_->green());
-    drawAmpersand(
-        container_->viewModel().enemyCurrentPositionCharsXY(),
-        container_->simulationDomain().enemyAmpersandSim().currentThrusterState(),
-        styles_->red());
-    drawStats();
+    drawAmpersand(viewModel_.currentPositionCharsXY(),
+                  viewModel_.currentThrusterState(), styles_->green());
+    drawAmpersand(viewModel_.enemyCurrentPositionCharsXY(),
+                  viewModel_.enemyCurrentThrusterState(), styles_->red());
     refresh();
     // Quick and dirty timing loop.  Should thread properly later
     std::this_thread::sleep_for(std::chrono::milliseconds(FRAME_PERIOD_MS));
@@ -88,13 +80,12 @@ void TerminalPresenter::handleKeyPresses() {
       running_ = false;
       break;
     case KEY_RESIZE:
-      container_->viewModel().updateTerminalDimensions(COLS, LINES);
+      viewModel_.updateTerminalDimensions(COLS, LINES);
     default:
       break;
     }
   } while (lastCharReadFromBuffer_ != ERR);
-  container_->simulationDomain().ampersandSim().setThrusterState(
-      commandedThrusterState);
+  viewModel_.setThrusterState(commandedThrusterState);
 }
 
 void TerminalPresenter::drawAmpersand(std::pair<int, int> location,
@@ -131,17 +122,4 @@ void TerminalPresenter::drawAmpersand(std::pair<int, int> location,
   default:
     break;
   }
-}
-
-void TerminalPresenter::drawStats() {
-  std::pair<double, double> currentPos =
-      container_->simulationDomain().ampersandSim().currentPos();
-  std::pair<double, double> currentVel =
-      container_->simulationDomain().ampersandSim().currentVel();
-  std::pair<double, double> currentAccel =
-      container_->simulationDomain().ampersandSim().currentAccel();
-  mvprintw(0, statsTextPosition_,
-           "Pos: %.3f, %.3f    Vel: %.3f, %.3f   Accel: %.3f, %.3f",
-           currentPos.first, currentPos.second, currentVel.first,
-           currentVel.second, currentAccel.first, currentAccel.second);
 }

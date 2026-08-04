@@ -1,8 +1,10 @@
+#include <gameLogicContainer.h>
 #include <terminalPresenter.h>
 
 int main() {
 
-  TerminalPresenter presenter;
+  GameLogicContainer container;
+  TerminalPresenter presenter(container.viewModel());
   presenter.run();
   return 0;
 }

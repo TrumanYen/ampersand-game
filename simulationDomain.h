@@ -10,7 +10,7 @@ public:
   SimulationDomain();
   ~SimulationDomain();
 
-  void incrementTimeMs(double timeDeltaMs);
+  void incrementTime(double timeDeltaSeconds);
   MapState &mapState();
   AmpersandSimulation &ampersandSim();
   AmpersandSimulation &enemyAmpersandSim();
