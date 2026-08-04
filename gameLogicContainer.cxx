@@ -1,8 +1,8 @@
 #include <gameLogicContainer.h>
 
-#include <simulationDomain.h>
-#include <useCase.h>
-#include <viewModel.h>
+#include <adapter/viewModel.h>
+#include <domain/simulationDomain.h>
+#include <useCase/useCase.h>
 
 GameLogicContainer::GameLogicContainer()
     : simulationDomain_(std::make_unique<SimulationDomain>()),

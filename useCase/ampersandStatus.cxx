@@ -1,6 +1,6 @@
-#include <ampersandStatus.h>
+#include <useCase/ampersandStatus.h>
 
-#include <ampersandSimulation.h>
+#include <domain/ampersandSimulation.h>
 
 AmpersandStatus::AmpersandStatus(const AmpersandSimulation &ampersand)
     : ampersand_(ampersand) {}

@@ -1,10 +1,10 @@
-#include <terminalPresenter.h>
+#include <external/terminalPresenter.h>
 
+#include <adapter/viewModel.h>
 #include <chrono>
-#include <ncursesStyleManager.h>
+#include <domain/thrusterState.h>
+#include <external/ncursesStyleManager.h>
 #include <thread>
-#include <thrusterState.h>
-#include <viewModel.h>
 
 namespace {
 const int TARGET_FPS = 60;

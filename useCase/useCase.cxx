@@ -1,9 +1,9 @@
-#include <useCase.h>
+#include <useCase/useCase.h>
 
-#include <ampersandSimulation.h>
-#include <ampersandStatus.h>
-#include <mapState.h>
-#include <simulationDomain.h>
+#include <useCase/ampersandStatus.h>
+#include <domain/ampersandSimulation.h>
+#include <domain/mapState.h>
+#include <domain/simulationDomain.h>
 
 UseCase::UseCase(SimulationDomain &domain)
     : domain_(domain),

@@ -1,4 +1,4 @@
-#include <mapState.h>
+#include <domain/mapState.h>
 
 namespace {
 const double MAP_WIDTH_M = 10.0;

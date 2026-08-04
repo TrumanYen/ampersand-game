@@ -18,15 +18,15 @@ set_target_properties(${ExeName} PROPERTIES
 target_sources(${ExeName} PRIVATE
 
   main.cxx
-  ampersandSimulation.cxx
-  viewModel.cxx
   gameLogicContainer.cxx
-  terminalPresenter.cxx
-  mapState.cxx
-  simulationDomain.cxx
-  ncursesStyleManager.cxx
-  useCase.cxx
-  ampersandStatus.cxx
+  external/terminalPresenter.cxx
+  external/ncursesStyleManager.cxx
+  adapter/viewModel.cxx
+  useCase/useCase.cxx
+  useCase/ampersandStatus.cxx
+  domain/ampersandSimulation.cxx
+  domain/mapState.cxx
+  domain/simulationDomain.cxx
 )
 
 target_include_directories(${ExeName} PRIVATE 

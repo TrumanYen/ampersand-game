@@ -1,9 +1,9 @@
-#include <ampersandSimulation.h>
+#include <domain/ampersandSimulation.h>
 
 #include <algorithm>
 #include <cmath>
-#include <mapState.h>
-#include <thrusterState.h>
+#include <domain/mapState.h>
+#include <domain/thrusterState.h>
 
 namespace {
 const double THRUSTER_ACCEL_MPSS = 15.0;

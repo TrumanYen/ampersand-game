@@ -1,4 +1,4 @@
-#include <ncursesStyleManager.h>
+#include <external/ncursesStyleManager.h>
 
 #include <ncurses.h>
 

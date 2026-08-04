@@ -1,5 +1,5 @@
+#include <external/terminalPresenter.h>
 #include <gameLogicContainer.h>
-#include <terminalPresenter.h>
 
 int main() {
 

@@ -1,8 +1,8 @@
-#include <viewModel.h>
+#include <adapter/viewModel.h>
 
 #include <algorithm>
-#include <ampersandStatus.h>
-#include <useCase.h>
+#include <useCase/ampersandStatus.h>
+#include <useCase/useCase.h>
 
 ViewModel::ViewModel(UseCase &useCase)
     : maxXChars_(0), maxYChars_(0), simToTerminalScaleX_(0.0),

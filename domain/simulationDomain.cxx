@@ -1,7 +1,7 @@
-#include <simulationDomain.h>
+#include <domain/simulationDomain.h>
 
-#include <ampersandSimulation.h>
-#include <mapState.h>
+#include <domain/ampersandSimulation.h>
+#include <domain/mapState.h>
 
 SimulationDomain::SimulationDomain()
     : mapState_(std::make_unique<MapState>()),
