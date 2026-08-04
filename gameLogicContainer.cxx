@@ -1,11 +1,13 @@
 #include <gameLogicContainer.h>
 
-#include <viewModel.h>
 #include <simulationDomain.h>
+#include <useCase.h>
+#include <viewModel.h>
 
 GameLogicContainer::GameLogicContainer()
     : simulationDomain_(std::make_unique<SimulationDomain>()),
-      viewModel_(std::make_unique<ViewModel>(*simulationDomain_)) {}
+      useCase_(std::make_unique<UseCase>(*simulationDomain_)),
+      viewModel_(std::make_unique<ViewModel>(*useCase_)) {}
 
 GameLogicContainer::~GameLogicContainer() = default;
 

@@ -25,6 +25,8 @@ target_sources(${ExeName} PRIVATE
   mapState.cxx
   simulationDomain.cxx
   ncursesStyleManager.cxx
+  useCase.cxx
+  ampersandStatus.cxx
 )
 
 target_include_directories(${ExeName} PRIVATE 

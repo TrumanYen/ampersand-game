@@ -1,29 +1,29 @@
-#include <algorithm>
-#include <ampersandSimulation.h>
-#include <mapState.h>
-#include <simulationDomain.h>
 #include <viewModel.h>
 
-ViewModel::ViewModel(SimulationDomain &simulationDomain)
+#include <algorithm>
+#include <ampersandStatus.h>
+#include <useCase.h>
+
+ViewModel::ViewModel(UseCase &useCase)
     : maxXChars_(0), maxYChars_(0), simToTerminalScaleX_(0.0),
-      simToTerminalScaleY_(0.0), simulationDomain_(simulationDomain) {}
+      simToTerminalScaleY_(0.0), useCase_(useCase) {}
 
 ViewModel::~ViewModel() = default;
 
 std::pair<int, int> ViewModel::currentPositionCharsXY() const {
-  return ampersandPositionCharsXY(simulationDomain_.ampersandSim());
+  return ampersandPositionCharsXY(useCase_.friendlyAmpersandStatus());
 }
 
 std::pair<int, int> ViewModel::enemyCurrentPositionCharsXY() const {
-  return ampersandPositionCharsXY(simulationDomain_.enemyAmpersandSim());
+  return ampersandPositionCharsXY(useCase_.enemyAmpersandStatus());
 }
 
 ThrusterState ViewModel::enemyCurrentThrusterState() const {
-  return simulationDomain_.enemyAmpersandSim().currentThrusterState();
+  return useCase_.enemyAmpersandStatus().currentThrusterState();
 }
 
 ThrusterState ViewModel::currentThrusterState() const {
-  return simulationDomain_.ampersandSim().currentThrusterState();
+  return useCase_.friendlyAmpersandStatus().currentThrusterState();
 }
 
 void ViewModel::updateTerminalDimensions(int numCharsX, int numCharsY) {
@@ -31,25 +31,25 @@ void ViewModel::updateTerminalDimensions(int numCharsX, int numCharsY) {
   maxYChars_ = numCharsY - 1;
   double heightToWidthAspectRatio =
       2.0 * static_cast<double>(numCharsY) / static_cast<double>(numCharsX);
-  simulationDomain_.mapState().setNewAspectRatio(heightToWidthAspectRatio);
-  simToTerminalScaleX_ = static_cast<double>(numCharsX) /
-                         simulationDomain_.mapState().mapWidthMeters();
+  useCase_.setNewAspectRatio(heightToWidthAspectRatio);
+  simToTerminalScaleX_ =
+      static_cast<double>(numCharsX) / useCase_.mapWidthMeters();
   simToTerminalScaleY_ = 0.5 * simToTerminalScaleX_;
 }
 
 void ViewModel::incrementTimeMs(int milliseconds) {
   double timeDeltaSeconds = 1e-3 * static_cast<double>(milliseconds);
-  simulationDomain_.incrementTime(timeDeltaSeconds);
+  useCase_.incrementTime(timeDeltaSeconds);
 }
 
 void ViewModel::setThrusterState(ThrusterState state) {
-  simulationDomain_.ampersandSim().setThrusterState(state);
+  useCase_.commandFriendlyThrusterState(state);
 }
 
-std::pair<int, int> ViewModel::ampersandPositionCharsXY(
-    const AmpersandSimulation &ampersand) const {
+std::pair<int, int>
+ViewModel::ampersandPositionCharsXY(const AmpersandStatus &ampersand) const {
 
-  std::pair<double, double> currentPosMeters = ampersand.currentPos();
+  std::pair<double, double> currentPosMeters = ampersand.currentPosition();
 
   int posXUnbounded = currentPosMeters.first * simToTerminalScaleX_;
   int posYUnbounded = currentPosMeters.second * simToTerminalScaleY_;

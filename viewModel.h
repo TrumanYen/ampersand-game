@@ -2,13 +2,13 @@
 
 #include <utility>
 
-class AmpersandSimulation;
-class SimulationDomain;
+class AmpersandStatus;
+class UseCase;
 enum class ThrusterState;
 
 class ViewModel {
 public:
-  ViewModel(SimulationDomain &simulationDomain);
+  ViewModel(UseCase &useCase);
 
   ~ViewModel();
 
@@ -23,12 +23,12 @@ public:
 
 private:
   std::pair<int, int>
-  ampersandPositionCharsXY(const AmpersandSimulation &ampersand) const;
+  ampersandPositionCharsXY(const AmpersandStatus &ampersand) const;
 
 private:
   int maxXChars_;
   int maxYChars_;
   double simToTerminalScaleX_;
   double simToTerminalScaleY_;
-  SimulationDomain &simulationDomain_;
+  UseCase &useCase_;
 };
