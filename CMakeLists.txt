@@ -24,6 +24,7 @@ target_sources(${ExeName} PRIVATE
   adapter/viewModel.cxx
   useCase/useCase.cxx
   useCase/ampersandStatus.cxx
+  useCase/enemyPilot.cxx
   domain/ampersandSimulation.cxx
   domain/mapState.cxx
   domain/simulationDomain.cxx

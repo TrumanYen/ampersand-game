@@ -1,12 +1,14 @@
 #include <useCase/useCase.h>
 
-#include <useCase/ampersandStatus.h>
 #include <domain/ampersandSimulation.h>
 #include <domain/mapState.h>
 #include <domain/simulationDomain.h>
+#include <useCase/ampersandStatus.h>
+#include <useCase/enemyPilot.h>
 
 UseCase::UseCase(SimulationDomain &domain)
-    : domain_(domain),
+    : domain_(domain), enemyPilot_(std::make_unique<EnemyPilot>(
+                           domain.ampersandSim(), domain.enemyAmpersandSim())),
       friendlyAmpersandStatus_(
           std::make_unique<AmpersandStatus>(domain.ampersandSim())),
       enemyAmpersandStatus_(
@@ -35,5 +37,6 @@ void UseCase::setNewAspectRatio(double heightToWidthRatio) {
 }
 
 void UseCase::incrementTime(double timeSeconds) {
+  enemyPilot_->update();
   domain_.incrementTime(timeSeconds);
 }

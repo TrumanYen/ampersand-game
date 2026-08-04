@@ -3,6 +3,7 @@
 #include <memory>
 
 class AmpersandStatus;
+class EnemyPilot;
 class SimulationDomain;
 enum class ThrusterState;
 
@@ -21,6 +22,7 @@ public:
 
 private:
   SimulationDomain &domain_;
+  std::unique_ptr<EnemyPilot> enemyPilot_;
   std::unique_ptr<AmpersandStatus> friendlyAmpersandStatus_;
   std::unique_ptr<AmpersandStatus> enemyAmpersandStatus_;
 };
