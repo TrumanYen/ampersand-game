@@ -19,7 +19,7 @@ target_sources(${ExeName} PRIVATE
 
   main.cxx
   ampersandSimulation.cxx
-  simToTerminalScaler.cxx
+  viewModel.cxx
   gameLogicContainer.cxx
   terminalPresenter.cxx
   mapState.cxx

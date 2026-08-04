@@ -5,11 +5,11 @@
 class AmpersandSimulation;
 class SimulationDomain;
 
-class SimToTerminalScaler {
+class ViewModel {
 public:
-  SimToTerminalScaler(SimulationDomain &simulationDomain);
+  ViewModel(SimulationDomain &simulationDomain);
 
-  ~SimToTerminalScaler();
+  ~ViewModel();
 
   std::pair<int, int> currentPositionCharsXY();
   std::pair<int, int> enemyCurrentPositionCharsXY();

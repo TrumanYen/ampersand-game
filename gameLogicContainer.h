@@ -3,7 +3,7 @@
 #include <memory>
 
 class SimulationDomain;
-class SimToTerminalScaler;
+class ViewModel;
 
 class GameLogicContainer {
 public:
@@ -11,9 +11,9 @@ public:
   ~GameLogicContainer();
 
   SimulationDomain &simulationDomain();
-  SimToTerminalScaler &simScaler();
+  ViewModel &viewModel();
 
 private:
   std::unique_ptr<SimulationDomain> simulationDomain_;
-  std::unique_ptr<SimToTerminalScaler> simScaler_;
+  std::unique_ptr<ViewModel> viewModel_;
 };

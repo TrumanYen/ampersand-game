@@ -6,7 +6,7 @@
 #include <gameLogicContainer.h>
 #include <simulationDomain.h>
 #include <ncursesStyleManager.h>
-#include <simToTerminalScaler.h>
+#include <viewModel.h>
 #include <thread>
 
 namespace {
@@ -34,7 +34,7 @@ TerminalPresenter::TerminalPresenter() {
 TerminalPresenter::~TerminalPresenter() {}
 
 void TerminalPresenter::run() {
-  container_->simScaler().updateTerminalDimensions(COLS, LINES);
+  container_->viewModel().updateTerminalDimensions(COLS, LINES);
   running_ = true;
   int framesSinceLastProcessedKeypresses = 0;
 
@@ -50,11 +50,11 @@ void TerminalPresenter::run() {
     }
     container_->simulationDomain().incrementTimeMs(FRAME_PERIOD_MS);
     erase();
-    drawAmpersand(container_->simScaler().currentPositionCharsXY(),
+    drawAmpersand(container_->viewModel().currentPositionCharsXY(),
                   container_->simulationDomain().ampersandSim().currentThrusterState(),
                   styles_->green());
     drawAmpersand(
-        container_->simScaler().enemyCurrentPositionCharsXY(),
+        container_->viewModel().enemyCurrentPositionCharsXY(),
         container_->simulationDomain().enemyAmpersandSim().currentThrusterState(),
         styles_->red());
     drawStats();
@@ -88,7 +88,7 @@ void TerminalPresenter::handleKeyPresses() {
       running_ = false;
       break;
     case KEY_RESIZE:
-      container_->simScaler().updateTerminalDimensions(COLS, LINES);
+      container_->viewModel().updateTerminalDimensions(COLS, LINES);
     default:
       break;
     }

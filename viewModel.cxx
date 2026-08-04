@@ -1,36 +1,35 @@
 #include <algorithm>
 #include <ampersandSimulation.h>
-#include <simulationDomain.h>
 #include <mapState.h>
-#include <simToTerminalScaler.h>
+#include <viewModel.h>
+#include <simulationDomain.h>
 
-SimToTerminalScaler::SimToTerminalScaler(SimulationDomain &simulationDomain)
+ViewModel::ViewModel(SimulationDomain &simulationDomain)
     : maxXChars_(0), maxYChars_(0), simToTerminalScaleX_(0.0),
       simToTerminalScaleY_(0.0), simulationDomain_(simulationDomain) {}
 
-SimToTerminalScaler::~SimToTerminalScaler() = default;
+ViewModel::~ViewModel() = default;
 
-std::pair<int, int> SimToTerminalScaler::currentPositionCharsXY() {
+std::pair<int, int> ViewModel::currentPositionCharsXY() {
   return ampersandPositionCharsXY(simulationDomain_.ampersandSim());
 }
-std::pair<int, int> SimToTerminalScaler::enemyCurrentPositionCharsXY() {
+std::pair<int, int> ViewModel::enemyCurrentPositionCharsXY() {
   return ampersandPositionCharsXY(simulationDomain_.enemyAmpersandSim());
 }
 
-void SimToTerminalScaler::updateTerminalDimensions(int numCharsX,
-                                                   int numCharsY) {
+void ViewModel::updateTerminalDimensions(int numCharsX, int numCharsY) {
   maxXChars_ = numCharsX - 1;
   maxYChars_ = numCharsY - 1;
   double heightToWidthAspectRatio =
       2.0 * static_cast<double>(numCharsY) / static_cast<double>(numCharsX);
   simulationDomain_.mapState().setNewAspectRatio(heightToWidthAspectRatio);
-  simToTerminalScaleX_ =
-      static_cast<double>(numCharsX) / simulationDomain_.mapState().mapWidthMeters();
+  simToTerminalScaleX_ = static_cast<double>(numCharsX) /
+                         simulationDomain_.mapState().mapWidthMeters();
   simToTerminalScaleY_ = 0.5 * simToTerminalScaleX_;
 }
 
-std::pair<int, int> SimToTerminalScaler::ampersandPositionCharsXY(
-    const AmpersandSimulation &ampersand) {
+std::pair<int, int>
+ViewModel::ampersandPositionCharsXY(const AmpersandSimulation &ampersand) {
 
   std::pair<double, double> currentPosMeters = ampersand.currentPos();
 
