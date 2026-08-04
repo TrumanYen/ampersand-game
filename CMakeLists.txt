@@ -23,7 +23,7 @@ target_sources(${ExeName} PRIVATE
   gameLogicContainer.cxx
   terminalPresenter.cxx
   mapState.cxx
-  gameState.cxx
+  simulationDomain.cxx
   ncursesStyleManager.cxx
 )
 

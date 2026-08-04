@@ -3,11 +3,11 @@
 #include <utility>
 
 class AmpersandSimulation;
-class GameState;
+class SimulationDomain;
 
 class SimToTerminalScaler {
 public:
-  SimToTerminalScaler(GameState &gameState);
+  SimToTerminalScaler(SimulationDomain &simulationDomain);
 
   ~SimToTerminalScaler();
 
@@ -24,5 +24,5 @@ private:
   int maxYChars_;
   double simToTerminalScaleX_;
   double simToTerminalScaleY_;
-  GameState &gameState_;
+  SimulationDomain &simulationDomain_;
 };

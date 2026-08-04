@@ -4,7 +4,7 @@
 #include <ampersandSimulation.h>
 #include <chrono>
 #include <gameLogicContainer.h>
-#include <gameState.h>
+#include <simulationDomain.h>
 #include <ncursesStyleManager.h>
 #include <simToTerminalScaler.h>
 #include <thread>
@@ -48,14 +48,14 @@ void TerminalPresenter::run() {
     } else {
       framesSinceLastProcessedKeypresses++;
     }
-    container_->gameState().incrementTimeMs(FRAME_PERIOD_MS);
+    container_->simulationDomain().incrementTimeMs(FRAME_PERIOD_MS);
     erase();
     drawAmpersand(container_->simScaler().currentPositionCharsXY(),
-                  container_->gameState().ampersandSim().currentThrusterState(),
+                  container_->simulationDomain().ampersandSim().currentThrusterState(),
                   styles_->green());
     drawAmpersand(
         container_->simScaler().enemyCurrentPositionCharsXY(),
-        container_->gameState().enemyAmpersandSim().currentThrusterState(),
+        container_->simulationDomain().enemyAmpersandSim().currentThrusterState(),
         styles_->red());
     drawStats();
     refresh();
@@ -93,7 +93,7 @@ void TerminalPresenter::handleKeyPresses() {
       break;
     }
   } while (lastCharReadFromBuffer_ != ERR);
-  container_->gameState().ampersandSim().setThrusterState(
+  container_->simulationDomain().ampersandSim().setThrusterState(
       commandedThrusterState);
 }
 
@@ -135,11 +135,11 @@ void TerminalPresenter::drawAmpersand(std::pair<int, int> location,
 
 void TerminalPresenter::drawStats() {
   std::pair<double, double> currentPos =
-      container_->gameState().ampersandSim().currentPos();
+      container_->simulationDomain().ampersandSim().currentPos();
   std::pair<double, double> currentVel =
-      container_->gameState().ampersandSim().currentVel();
+      container_->simulationDomain().ampersandSim().currentVel();
   std::pair<double, double> currentAccel =
-      container_->gameState().ampersandSim().currentAccel();
+      container_->simulationDomain().ampersandSim().currentAccel();
   mvprintw(0, statsTextPosition_,
            "Pos: %.3f, %.3f    Vel: %.3f, %.3f   Accel: %.3f, %.3f",
            currentPos.first, currentPos.second, currentVel.first,

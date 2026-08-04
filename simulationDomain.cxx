@@ -1,28 +1,28 @@
-#include <gameState.h>
+#include <simulationDomain.h>
 
 #include <ampersandSimulation.h>
 #include <mapState.h>
 
-GameState::GameState()
+SimulationDomain::SimulationDomain()
     : mapState_(std::make_unique<MapState>()),
       ampersandSim_(std::make_unique<AmpersandSimulation>(
           *mapState_, mapState_->topLeft())),
       enemyAmpersandSim_(std::make_unique<AmpersandSimulation>(
           *mapState_, mapState_->topRight())) {}
 
-GameState::~GameState() {}
+SimulationDomain::~SimulationDomain() {}
 
-void GameState::incrementTimeMs(double timeDeltaMs) {
+void SimulationDomain::incrementTimeMs(double timeDeltaMs) {
   double timeDeltaSeconds = 1e-3 * timeDeltaMs;
   mapState_->incrementTime(timeDeltaSeconds);
   ampersandSim_->incrementTime(timeDeltaSeconds);
   enemyAmpersandSim_->incrementTime(timeDeltaSeconds);
 }
 
-MapState &GameState::mapState() { return *mapState_; }
+MapState &SimulationDomain::mapState() { return *mapState_; }
 
-AmpersandSimulation &GameState::ampersandSim() { return *ampersandSim_; }
+AmpersandSimulation &SimulationDomain::ampersandSim() { return *ampersandSim_; }
 
-AmpersandSimulation &GameState::enemyAmpersandSim() {
+AmpersandSimulation &SimulationDomain::enemyAmpersandSim() {
   return *enemyAmpersandSim_;
 }

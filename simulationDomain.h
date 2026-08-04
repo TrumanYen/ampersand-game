@@ -5,10 +5,10 @@
 class MapState;
 class AmpersandSimulation;
 
-class GameState {
+class SimulationDomain {
 public:
-  GameState();
-  ~GameState();
+  SimulationDomain();
+  ~SimulationDomain();
 
   void incrementTimeMs(double timeDeltaMs);
   MapState &mapState();

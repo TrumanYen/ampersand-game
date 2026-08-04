@@ -1,20 +1,20 @@
 #include <algorithm>
 #include <ampersandSimulation.h>
-#include <gameState.h>
+#include <simulationDomain.h>
 #include <mapState.h>
 #include <simToTerminalScaler.h>
 
-SimToTerminalScaler::SimToTerminalScaler(GameState &gameState)
+SimToTerminalScaler::SimToTerminalScaler(SimulationDomain &simulationDomain)
     : maxXChars_(0), maxYChars_(0), simToTerminalScaleX_(0.0),
-      simToTerminalScaleY_(0.0), gameState_(gameState) {}
+      simToTerminalScaleY_(0.0), simulationDomain_(simulationDomain) {}
 
 SimToTerminalScaler::~SimToTerminalScaler() = default;
 
 std::pair<int, int> SimToTerminalScaler::currentPositionCharsXY() {
-  return ampersandPositionCharsXY(gameState_.ampersandSim());
+  return ampersandPositionCharsXY(simulationDomain_.ampersandSim());
 }
 std::pair<int, int> SimToTerminalScaler::enemyCurrentPositionCharsXY() {
-  return ampersandPositionCharsXY(gameState_.enemyAmpersandSim());
+  return ampersandPositionCharsXY(simulationDomain_.enemyAmpersandSim());
 }
 
 void SimToTerminalScaler::updateTerminalDimensions(int numCharsX,
@@ -23,9 +23,9 @@ void SimToTerminalScaler::updateTerminalDimensions(int numCharsX,
   maxYChars_ = numCharsY - 1;
   double heightToWidthAspectRatio =
       2.0 * static_cast<double>(numCharsY) / static_cast<double>(numCharsX);
-  gameState_.mapState().setNewAspectRatio(heightToWidthAspectRatio);
+  simulationDomain_.mapState().setNewAspectRatio(heightToWidthAspectRatio);
   simToTerminalScaleX_ =
-      static_cast<double>(numCharsX) / gameState_.mapState().mapWidthMeters();
+      static_cast<double>(numCharsX) / simulationDomain_.mapState().mapWidthMeters();
   simToTerminalScaleY_ = 0.5 * simToTerminalScaleX_;
 }
 
