@@ -1,4 +1,4 @@
-#include <external/terminalPresenter.h>
+#include <external/ampersandGameTui.h>
 
 #include <adapter/viewModel.h>
 #include <chrono>
@@ -13,7 +13,7 @@ const int TARGET_KEYPRESS_CAPTURE_FREQ = 10;
 const int FRAMES_PER_KEYPRESS_READ = TARGET_FPS / TARGET_KEYPRESS_CAPTURE_FREQ;
 } // namespace
 
-TerminalPresenter::TerminalPresenter(ViewModel &viewModel)
+AmpersandGameTui::AmpersandGameTui(ViewModel &viewModel)
     : viewModel_(viewModel) {
   initscr();
   nodelay(stdscr, TRUE);
@@ -24,9 +24,9 @@ TerminalPresenter::TerminalPresenter(ViewModel &viewModel)
   running_ = false;
 }
 
-TerminalPresenter::~TerminalPresenter() {}
+AmpersandGameTui::~AmpersandGameTui() {}
 
-void TerminalPresenter::run() {
+void AmpersandGameTui::run() {
   viewModel_.updateTerminalDimensions(COLS, LINES);
   running_ = true;
   int framesSinceLastProcessedKeypresses = 0;
@@ -55,7 +55,7 @@ void TerminalPresenter::run() {
   endwin();
 }
 
-void TerminalPresenter::handleKeyPresses() {
+void AmpersandGameTui::handleKeyPresses() {
   // There may be many read from the buffer.  We should process all of them.
   ThrusterState commandedThrusterState = ThrusterState::Off;
   do {
@@ -85,9 +85,9 @@ void TerminalPresenter::handleKeyPresses() {
   viewModel_.setThrusterState(commandedThrusterState);
 }
 
-void TerminalPresenter::drawAmpersand(std::pair<int, int> location,
-                                      ThrusterState thrusterState,
-                                      chtype style) {
+void AmpersandGameTui::drawAmpersand(std::pair<int, int> location,
+                                     ThrusterState thrusterState,
+                                     chtype style) {
   mvaddch(location.second, location.first, '&' | style);
   chtype blue = styles_->blue();
   switch (thrusterState) {

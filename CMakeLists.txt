@@ -19,7 +19,7 @@ target_sources(${ExeName} PRIVATE
 
   main.cxx
   ampersandGameContainer.cxx
-  external/terminalPresenter.cxx
+  external/ampersandGameTui.cxx
   external/ncursesStyleManager.cxx
   adapter/viewModel.cxx
   useCase/useCase.cxx

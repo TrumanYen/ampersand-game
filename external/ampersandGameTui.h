@@ -8,10 +8,10 @@ class NcursesStyleManager;
 enum class ThrusterState;
 class ViewModel;
 
-class TerminalPresenter {
+class AmpersandGameTui {
 public:
-  TerminalPresenter(ViewModel &viewModel);
-  ~TerminalPresenter();
+  AmpersandGameTui(ViewModel &viewModel);
+  ~AmpersandGameTui();
 
   void run();
 
