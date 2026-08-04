@@ -20,9 +20,6 @@ TerminalPresenter::TerminalPresenter(ViewModel &viewModel)
   noecho();
   curs_set(0);
   keypad(stdscr, TRUE);
-  // Unfortunately need to instantiate this container here for now because we do
-  // not yet have the ability to dynamically resize, so we need to receive the
-  // aspect ratio on construction
   styles_ = std::make_unique<NcursesStyleManager>();
   running_ = false;
 }
