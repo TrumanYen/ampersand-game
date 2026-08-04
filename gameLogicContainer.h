@@ -7,7 +7,7 @@ class SimToTerminalScaler;
 
 class GameLogicContainer {
 public:
-  GameLogicContainer(int numCharsX, int numCharsY);
+  GameLogicContainer();
   ~GameLogicContainer();
 
   GameState &gameState();

@@ -25,7 +25,7 @@ TerminalPresenter::TerminalPresenter() {
   // Unfortunately need to instantiate this container here for now because we do
   // not yet have the ability to dynamically resize, so we need to receive the
   // aspect ratio on construction
-  container_ = std::make_unique<GameLogicContainer>(COLS, LINES);
+  container_ = std::make_unique<GameLogicContainer>();
   styles_ = std::make_unique<NcursesStyleManager>();
   statsTextPosition_ = std::max(0, (COLS / 2) - 24);
   running_ = false;
@@ -34,6 +34,7 @@ TerminalPresenter::TerminalPresenter() {
 TerminalPresenter::~TerminalPresenter() {}
 
 void TerminalPresenter::run() {
+  container_->simScaler().updateTerminalDimensions(COLS, LINES);
   running_ = true;
   int framesSinceLastProcessedKeypresses = 0;
 

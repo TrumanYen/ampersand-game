@@ -4,11 +4,9 @@
 #include <mapState.h>
 #include <simToTerminalScaler.h>
 
-SimToTerminalScaler::SimToTerminalScaler(int numCharsX, int numCharsY,
-                                         GameState &gameState)
-    : gameState_(gameState) {
-  updateTerminalDimensions(numCharsX, numCharsY);
-}
+SimToTerminalScaler::SimToTerminalScaler(GameState &gameState)
+    : maxXChars_(0), maxYChars_(0), simToTerminalScaleX_(0.0),
+      simToTerminalScaleY_(0.0), gameState_(gameState) {}
 
 SimToTerminalScaler::~SimToTerminalScaler() = default;
 

@@ -7,7 +7,7 @@ class GameState;
 
 class SimToTerminalScaler {
 public:
-  SimToTerminalScaler(int numCharsX, int numCharsY, GameState &gameState);
+  SimToTerminalScaler(GameState &gameState);
 
   ~SimToTerminalScaler();
 
@@ -20,9 +20,9 @@ private:
   ampersandPositionCharsXY(const AmpersandSimulation &ampersand);
 
 private:
-  GameState &gameState_;
   int maxXChars_;
   int maxYChars_;
   double simToTerminalScaleX_;
   double simToTerminalScaleY_;
+  GameState &gameState_;
 };
