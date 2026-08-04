@@ -4,7 +4,6 @@
 int main() {
 
   GameLogicContainer container;
-  TerminalPresenter presenter(container.viewModel());
-  presenter.run();
+  container.presenter().run();
   return 0;
 }
