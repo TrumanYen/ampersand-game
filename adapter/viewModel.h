@@ -16,6 +16,7 @@ public:
   std::pair<int, int> enemyCurrentPositionCharsXY() const;
   ThrusterState enemyCurrentThrusterState() const;
   ThrusterState currentThrusterState() const;
+  bool gameOver() const;
 
   void updateTerminalDimensions(int numCharsX, int numCharsY);
   void incrementTimeMs(int milliseconds);

@@ -22,6 +22,8 @@ ThrusterState ViewModel::enemyCurrentThrusterState() const {
   return useCase_.enemyAmpersandStatus().currentThrusterState();
 }
 
+bool ViewModel::gameOver() const { return useCase_.gameOver(); }
+
 ThrusterState ViewModel::currentThrusterState() const {
   return useCase_.friendlyAmpersandStatus().currentThrusterState();
 }

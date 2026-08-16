@@ -15,6 +15,7 @@ public:
   const AmpersandStatus &friendlyAmpersandStatus() const;
   const AmpersandStatus &enemyAmpersandStatus() const;
   double mapWidthMeters() const;
+  bool gameOver() const;
 
   void commandFriendlyThrusterState(ThrusterState state);
   void setNewAspectRatio(double heightToWidthRatio);

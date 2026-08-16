@@ -47,6 +47,9 @@ void AmpersandGameTui::run() {
                   viewModel_.currentThrusterState(), styles_->green());
     drawAmpersand(viewModel_.enemyCurrentPositionCharsXY(),
                   viewModel_.enemyCurrentThrusterState(), styles_->red());
+    if (viewModel_.gameOver()) {
+      break;
+    }
     refresh();
     // Quick and dirty timing loop.  Should thread properly later
     std::this_thread::sleep_for(std::chrono::milliseconds(FRAME_PERIOD_MS));

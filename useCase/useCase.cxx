@@ -28,6 +28,8 @@ double UseCase::mapWidthMeters() const {
   return domain_.mapState().mapWidthMeters();
 }
 
+bool UseCase::gameOver() const { return domain_.ampersandsHaveCollided(); }
+
 void UseCase::commandFriendlyThrusterState(ThrusterState state) {
   domain_.ampersandSim().setThrusterState(state);
 }

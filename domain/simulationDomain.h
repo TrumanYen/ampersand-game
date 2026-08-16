@@ -10,6 +10,8 @@ public:
   SimulationDomain();
   ~SimulationDomain();
 
+  bool ampersandsHaveCollided() const;
+
   void incrementTime(double timeDeltaSeconds);
   MapState &mapState();
   AmpersandSimulation &ampersandSim();
