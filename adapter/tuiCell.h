@@ -1,11 +1,11 @@
 #pragma once
 
-#include <utility>
+#include <domain/vector2d.h>
 
 enum class TuiColor { Red, Green, Blue };
 
 struct TuiCell {
   char character;
   TuiColor color;
-  std::pair<int, int> location;
+  Vector2D<int> location;
 };

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <utility>
+#include <domain/vector2d.h>
 
 class AmpersandSimulation;
 enum class ThrusterState;
@@ -12,7 +12,7 @@ public:
   ~AmpersandStatus();
 
   ThrusterState currentThrusterState() const;
-  std::pair<double, double> currentPosition() const;
+  Vector2D<double> currentPosition() const;
 
 private:
   const AmpersandSimulation &ampersand_;

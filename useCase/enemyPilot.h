@@ -1,6 +1,6 @@
 #pragma once
 
-#include <utility>
+#include <domain/vector2d.h>
 
 class AmpersandSimulation;
 
@@ -16,5 +16,5 @@ private:
   const AmpersandSimulation &playerAmpersand_;
   AmpersandSimulation &enemyAmpersand_;
 
-  std::pair<double, double> previousError_;
+  Vector2D<double> previousError_;
 };

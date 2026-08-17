@@ -13,96 +13,79 @@ const double NEGATIVE_TERMINAL_VELOCITY = -1.0 * TERMINAL_VELOCITY;
 } // namespace
 
 AmpersandSimulation::AmpersandSimulation(const MapState &mapState,
-                                         std::pair<double, double> spawnPoint)
-    : mapState_(mapState), xPos_(spawnPoint.first), yPos_(spawnPoint.second),
-      xVel_(0.0), yVel_(0.0), xAccel_(0.0), yAccel_(0.0),
+                                         Vector2D<double> spawnPoint)
+    : mapState_(mapState), pos_(spawnPoint), vel_(0.0, 0.0),
       thrusterState_(ThrusterState::Off) {}
 
 AmpersandSimulation::~AmpersandSimulation() = default;
 
 void AmpersandSimulation::incrementTime(double timeSeconds) {
-  calculateCurrentAcceleration();
+  Vector2D<double> newVelUnclamped =
+      (currentAcceleration() * timeSeconds) + vel_;
+  vel_.x = std::clamp(newVelUnclamped.x, NEGATIVE_TERMINAL_VELOCITY,
+                      TERMINAL_VELOCITY);
+  vel_.y = std::clamp(newVelUnclamped.y, NEGATIVE_TERMINAL_VELOCITY,
+                      TERMINAL_VELOCITY);
 
-  double deltaVelX = xAccel_ * timeSeconds;
-  double deltaVelY = yAccel_ * timeSeconds;
-  xVel_ = std::clamp(xVel_ + deltaVelX, NEGATIVE_TERMINAL_VELOCITY,
-                     TERMINAL_VELOCITY);
-  yVel_ = std::clamp(yVel_ + deltaVelY, NEGATIVE_TERMINAL_VELOCITY,
-                     TERMINAL_VELOCITY);
-
-  double deltaX = xVel_ * timeSeconds;
-  double deltaY = yVel_ * timeSeconds;
-
-  displaceAmpersand(deltaX, deltaY);
+  displaceAmpersand(vel_ * timeSeconds);
 }
 
 void AmpersandSimulation::setThrusterState(ThrusterState state) {
   thrusterState_ = state;
 }
 
-std::pair<double, double> AmpersandSimulation::currentPos() const {
-  return std::pair<double, double>(xPos_, yPos_);
-}
+Vector2D<double> AmpersandSimulation::currentPos() const { return pos_; }
 
-std::pair<double, double> AmpersandSimulation::currentVel() const {
-  return std::pair<double, double>(xVel_, yVel_);
-}
-
-std::pair<double, double> AmpersandSimulation::currentAccel() const {
-  return std::pair<double, double>(xAccel_, yAccel_);
-}
+Vector2D<double> AmpersandSimulation::currentVel() const { return vel_; }
 
 ThrusterState AmpersandSimulation::currentThrusterState() const {
   return thrusterState_;
 }
 
-void AmpersandSimulation::displaceAmpersand(double deltaX, double deltaY) {
+void AmpersandSimulation::displaceAmpersand(Vector2D<double> displacement) {
   // for now we can assume the only collisions are the walls, and that all the
   // walls except the floor are stationary.
-  double desiredXPos = xPos_ + deltaX;
-  double desiredYPos = yPos_ + deltaY;
+  Vector2D<double> desiredPos = pos_ + displacement;
 
   bool horizontalCollisionDetected =
-      (desiredXPos < 0.0 || desiredXPos > mapState_.mapWidthMeters());
-  bool ceilingCollisionDetected = desiredYPos < 0.0;
-  bool floorCollisionDetected = desiredYPos > mapState_.mapHeightMeters();
+      (desiredPos.x < 0.0 || desiredPos.x > mapState_.mapWidthMeters());
+  bool ceilingCollisionDetected = desiredPos.y < 0.0;
+  bool floorCollisionDetected = desiredPos.y > mapState_.mapHeightMeters();
 
-  xPos_ = std::clamp(desiredXPos, 0.0, mapState_.mapWidthMeters());
-  yPos_ = std::clamp(desiredYPos, 0.0, mapState_.mapHeightMeters());
+  pos_.x = std::clamp(desiredPos.x, 0.0, mapState_.mapWidthMeters());
+  pos_.y = std::clamp(desiredPos.y, 0.0, mapState_.mapHeightMeters());
 
   if (horizontalCollisionDetected) {
-    xVel_ = -0.8 * xVel_;
-    yVel_ = 0.9 * yVel_;
+    vel_.x *= -0.8;
+    vel_.y *= 0.9;
   }
   if (floorCollisionDetected) {
-    yVel_ -= mapState_.floorVelocity();
+    vel_.y -= mapState_.floorVelocity();
   }
   if (ceilingCollisionDetected || floorCollisionDetected) {
-    yVel_ = -0.8 * yVel_;
-    xVel_ = 0.9 * xVel_;
+    vel_.y *= -0.8;
+    vel_.x *= 0.9;
   }
 }
 
-void AmpersandSimulation::calculateCurrentAcceleration() {
-  // accel should not be a member variable since it gets recalculated every
-  // frame anyways
-  xAccel_ = 0.0;
-  yAccel_ = 9.81;
+Vector2D<double> AmpersandSimulation::currentAcceleration() const {
+  Vector2D<double> accel(0.0, 9.81);
   switch (thrusterState_) {
   case ThrusterState::Up:
-    yAccel_ -= THRUSTER_ACCEL_MPSS;
+    accel.y -= THRUSTER_ACCEL_MPSS;
     break;
   case ThrusterState::Down:
-    yAccel_ += THRUSTER_ACCEL_MPSS;
+    accel.y += THRUSTER_ACCEL_MPSS;
     break;
   case ThrusterState::Left:
-    xAccel_ -= THRUSTER_ACCEL_MPSS;
+    accel.x -= THRUSTER_ACCEL_MPSS;
     break;
   case ThrusterState::Right:
-    xAccel_ += THRUSTER_ACCEL_MPSS;
+    accel.x += THRUSTER_ACCEL_MPSS;
     break;
   case ThrusterState::Off:
   default:
     break;
   }
+  return accel;
 }

@@ -11,6 +11,6 @@ ThrusterState AmpersandStatus::currentThrusterState() const {
   return ampersand_.currentThrusterState();
 }
 
-std::pair<double, double> AmpersandStatus::currentPosition() const {
+Vector2D<double> AmpersandStatus::currentPosition() const {
   return ampersand_.currentPos();
 }

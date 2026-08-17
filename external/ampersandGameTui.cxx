@@ -45,7 +45,7 @@ void AmpersandGameTui::run() {
     erase();
 
     for (const TuiCell &cell : viewModel_.cellsToRender()) {
-      mvaddch(cell.location.second, cell.location.first,
+      mvaddch(cell.location.y, cell.location.x,
               cell.character | styles_->styleWithColor(cell.color));
     }
 

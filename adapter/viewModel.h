@@ -1,7 +1,7 @@
 #pragma once
 
+#include <domain/vector2d.h>
 #include <ncurses.h>
-#include <utility>
 #include <vector>
 
 class AmpersandStatus;
@@ -24,7 +24,7 @@ public:
   void setThrusterState(ThrusterState state);
 
 private:
-  std::pair<int, int>
+  Vector2D<int>
   ampersandPositionCharsXY(const AmpersandStatus &ampersand) const;
   void addRenderableCellsForAmpersand(const AmpersandStatus &ampersand,
                                       TuiColor color,

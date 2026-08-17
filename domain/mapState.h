@@ -1,6 +1,6 @@
 #pragma once
 
-#include <utility>
+#include <domain/vector2d.h>
 
 class MapState {
 public:
@@ -13,8 +13,9 @@ public:
   double mapWidthMeters() const;
   double mapHeightMeters() const;
   double floorVelocity() const;
-  std::pair<double, double> topLeft() const;
-  std::pair<double, double> topRight() const;
+
+  Vector2D<double> topLeft() const;
+  Vector2D<double> topRight() const;
 
 private:
   double maxX_;
