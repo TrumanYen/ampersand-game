@@ -43,10 +43,12 @@ void AmpersandGameTui::run() {
     }
     viewModel_.incrementTimeMs(FRAME_PERIOD_MS);
     erase();
-    drawAmpersand(viewModel_.currentPositionCharsXY(),
-                  viewModel_.currentThrusterState(), styles_->green());
-    drawAmpersand(viewModel_.enemyCurrentPositionCharsXY(),
-                  viewModel_.enemyCurrentThrusterState(), styles_->red());
+
+    for (const TuiCell &cell : viewModel_.cellsToRender()) {
+      mvaddch(cell.location.second, cell.location.first,
+              cell.character | styles_->styleWithColor(cell.color));
+    }
+
     if (viewModel_.gameOver()) {
       break;
     }
@@ -86,40 +88,4 @@ void AmpersandGameTui::handleKeyPresses() {
     }
   } while (lastCharReadFromBuffer_ != ERR);
   viewModel_.setThrusterState(commandedThrusterState);
-}
-
-void AmpersandGameTui::drawAmpersand(std::pair<int, int> location,
-                                     ThrusterState thrusterState,
-                                     chtype style) {
-  mvaddch(location.second, location.first, '&' | style);
-  chtype blue = styles_->blue();
-  switch (thrusterState) {
-  case ThrusterState::Left:
-    mvaddch(location.second, location.first + 1, '<' | blue);
-    mvaddch(location.second, location.first + 2, '<' | blue);
-    break;
-  case ThrusterState::Right:
-    mvaddch(location.second, location.first - 1, '>' | blue);
-    mvaddch(location.second, location.first - 2, '>' | blue);
-    break;
-  case ThrusterState::Down:
-    mvaddch(location.second - 1, location.first, 'v' | blue);
-    mvaddch(location.second - 2, location.first, 'v' | blue);
-    break;
-  case ThrusterState::Up:
-    mvaddch(location.second + 1, location.first, '^' | blue);
-    mvaddch(location.second + 2, location.first, '^' | blue);
-    if (location.second + 2 >= LINES) {
-      mvaddch(LINES - 1, location.first - 1, '>' | blue);
-      mvaddch(LINES - 1, location.first + 1, '<' | blue);
-    }
-    if (location.second + 1 >= LINES) {
-      mvaddch(LINES - 1, location.first - 2, '>' | blue);
-      mvaddch(LINES - 1, location.first + 2, '<' | blue);
-    }
-    break;
-  case ThrusterState::Off:
-  default:
-    break;
-  }
 }

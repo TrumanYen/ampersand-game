@@ -2,17 +2,16 @@
 
 #include <ncurses.h>
 
+#include <adapter/tuiCell.h>
+#include <map>
+
 class NcursesStyleManager {
 public:
   NcursesStyleManager();
   ~NcursesStyleManager();
 
-  chtype red() const;
-  chtype green() const;
-  chtype blue() const;
+  chtype styleWithColor(TuiColor color);
 
 private:
-  chtype red_;
-  chtype green_;
-  chtype blue_;
+  std::map<TuiColor, chtype> colorToStyleMap_;
 };

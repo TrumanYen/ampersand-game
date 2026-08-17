@@ -17,8 +17,6 @@ public:
 
 private:
   void handleKeyPresses();
-  void drawAmpersand(std::pair<int, int> location, ThrusterState thrusterState,
-                     chtype style);
 
 private:
   ViewModel &viewModel_;

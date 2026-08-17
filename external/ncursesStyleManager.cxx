@@ -7,17 +7,18 @@ NcursesStyleManager::NcursesStyleManager() {
   use_default_colors();
 
   init_pair(1, COLOR_RED, -1);
-  red_ = COLOR_PAIR(1);
+  colorToStyleMap_[TuiColor::Red] = COLOR_PAIR(1);
   init_pair(2, COLOR_GREEN, -1);
-  green_ = COLOR_PAIR(2);
+  colorToStyleMap_[TuiColor::Green] = COLOR_PAIR(2);
   init_pair(3, COLOR_BLUE, -1);
-  blue_ = COLOR_PAIR(3);
+  colorToStyleMap_[TuiColor::Blue] = COLOR_PAIR(3);
 }
 
 NcursesStyleManager::~NcursesStyleManager() = default;
 
-chtype NcursesStyleManager::red() const { return red_; }
-
-chtype NcursesStyleManager::green() const { return green_; }
-
-chtype NcursesStyleManager::blue() const { return blue_; }
+chtype NcursesStyleManager::styleWithColor(TuiColor color) {
+  if (colorToStyleMap_.contains(color)) {
+    return colorToStyleMap_[color];
+  }
+  return colorToStyleMap_[TuiColor::Blue];
+}

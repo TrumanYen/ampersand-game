@@ -1,10 +1,14 @@
 #pragma once
 
+#include <ncurses.h>
 #include <utility>
+#include <vector>
 
 class AmpersandStatus;
 class UseCase;
 enum class ThrusterState;
+struct TuiCell;
+enum class TuiColor;
 
 class ViewModel {
 public:
@@ -12,10 +16,7 @@ public:
 
   ~ViewModel();
 
-  std::pair<int, int> currentPositionCharsXY() const;
-  std::pair<int, int> enemyCurrentPositionCharsXY() const;
-  ThrusterState enemyCurrentThrusterState() const;
-  ThrusterState currentThrusterState() const;
+  std::vector<TuiCell> cellsToRender() const;
   bool gameOver() const;
 
   void updateTerminalDimensions(int numCharsX, int numCharsY);
@@ -25,11 +26,15 @@ public:
 private:
   std::pair<int, int>
   ampersandPositionCharsXY(const AmpersandStatus &ampersand) const;
+  void addRenderableCellsForAmpersand(const AmpersandStatus &ampersand,
+                                      TuiColor color,
+                                      std::vector<TuiCell> &cellsOut) const;
 
 private:
   int maxXChars_;
   int maxYChars_;
   double simToTerminalScaleX_;
   double simToTerminalScaleY_;
+
   UseCase &useCase_;
 };
