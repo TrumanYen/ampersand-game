@@ -7,6 +7,7 @@ namespace {
 const double TERMINAL_VELOCITY = 20.0;
 const double NEGATIVE_TERMINAL_VELOCITY = -1.0 * TERMINAL_VELOCITY;
 const Vector2D<double> GRAVITY(0.0, 9.81);
+const double AIR_RESISTANCE_VELOCITY_MULTIPLIER = 0.995;
 } // namespace
 
 ElasticBody::ElasticBody(const MapState &mapState, Vector2D<double> spawnPoint)
@@ -19,7 +20,8 @@ void ElasticBody::accelerate(Vector2D<double> acceleration) {
 }
 
 void ElasticBody::incrementTime(double timeSeconds) {
-  Vector2D<double> newVelUnclamped = (accel_ * timeSeconds) + vel_;
+  Vector2D<double> newVelUnclamped =
+      ((accel_ * timeSeconds) + vel_) * AIR_RESISTANCE_VELOCITY_MULTIPLIER;
   vel_.x = std::clamp(newVelUnclamped.x, NEGATIVE_TERMINAL_VELOCITY,
                       TERMINAL_VELOCITY);
   vel_.y = std::clamp(newVelUnclamped.y, NEGATIVE_TERMINAL_VELOCITY,
