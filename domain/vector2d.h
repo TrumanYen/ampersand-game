@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cmath>
 #include <type_traits>
 
 template <typename T>
@@ -10,6 +11,10 @@ public:
   Vector2D(T x, T y) : x(x), y(y) {}
   ~Vector2D() = default;
 
+  T x;
+  T y;
+
+public:
   Vector2D<T> operator+(Vector2D<T> rhs) const {
     return Vector2D<T>(x + rhs.x, y + rhs.y);
   }
@@ -32,6 +37,9 @@ public:
            (displacement.y * displacement.y);
   }
 
-  T x;
-  T y;
+  T magnitude() { return std::sqrt((x * x) + (y * y)); }
+
+  T dot(Vector2D<T> other) const { return (x * other.x) + (y * other.y); }
+
+  Vector2D<T> normalVector() const { return Vector2D<T>(-1.0 * y, x); }
 };

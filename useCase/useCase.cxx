@@ -23,7 +23,7 @@ double UseCase::mapWidthMeters() const {
   return domain_.mapState().mapWidthMeters();
 }
 
-bool UseCase::gameOver() const { return domain_.bodiesHaveCollided(); }
+bool UseCase::damageSustained() const { return domain_.bodiesHaveCollided(); }
 
 void UseCase::commandFriendlyThrusterState(ThrusterState state) {
   friendlyAmpersand_->setThrusterState(state);

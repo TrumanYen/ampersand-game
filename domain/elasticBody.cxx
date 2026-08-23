@@ -56,6 +56,8 @@ void ElasticBody::attemptDisplacement(Vector2D<double> displacement) {
   }
 }
 
+void ElasticBody::setVelocity(Vector2D<double> velocity) { vel_ = velocity; }
+
 Vector2D<double> ElasticBody::position() const { return pos_; }
 
 Vector2D<double> ElasticBody::velocity() const { return vel_; }

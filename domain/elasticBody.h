@@ -13,6 +13,8 @@ public:
   void accelerate(Vector2D<double> acceleration);
   void incrementTime(double timeSeconds);
 
+  void setVelocity(Vector2D<double> velocity);
+
   Vector2D<double> position() const;
   Vector2D<double> velocity() const;
 

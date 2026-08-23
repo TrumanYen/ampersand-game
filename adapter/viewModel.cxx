@@ -2,8 +2,8 @@
 
 #include <adapter/tuiCell.h>
 #include <algorithm>
-#include <useCase/thrusterState.h>
 #include <useCase/ampersand.h>
+#include <useCase/thrusterState.h>
 #include <useCase/useCase.h>
 
 ViewModel::ViewModel(UseCase &useCase)
@@ -21,7 +21,10 @@ std::vector<TuiCell> ViewModel::cellsToRender() const {
   return cells;
 }
 
-bool ViewModel::gameOver() const { return useCase_.gameOver(); }
+TuiColor ViewModel::backgroundColor() const {
+  return useCase_.damageSustained() ? TuiColor::WhiteOnRed
+                                    : TuiColor::Transparent;
+}
 
 void ViewModel::updateTerminalDimensions(int numCharsX, int numCharsY) {
   maxXChars_ = numCharsX - 1;

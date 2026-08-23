@@ -2,9 +2,9 @@
 
 #include <adapter/viewModel.h>
 #include <chrono>
-#include <useCase/thrusterState.h>
 #include <external/ncursesStyleManager.h>
 #include <thread>
+#include <useCase/thrusterState.h>
 
 namespace {
 const int TARGET_FPS = 60;
@@ -49,9 +49,7 @@ void AmpersandGameTui::run() {
               cell.character | styles_->styleWithColor(cell.color));
     }
 
-    if (viewModel_.gameOver()) {
-      break;
-    }
+    bkgd(styles_->styleWithColor(viewModel_.backgroundColor()));
     refresh();
     // Quick and dirty timing loop.  Should thread properly later
     std::this_thread::sleep_for(std::chrono::milliseconds(FRAME_PERIOD_MS));
@@ -59,7 +57,6 @@ void AmpersandGameTui::run() {
 
   endwin();
 }
-
 void AmpersandGameTui::handleKeyPresses() {
   // There may be many read from the buffer.  We should process all of them.
   ThrusterState commandedThrusterState = ThrusterState::Off;

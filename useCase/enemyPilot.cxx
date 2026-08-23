@@ -17,6 +17,9 @@ EnemyPilot::EnemyPilot(const Ampersand &playerAmpersand,
 EnemyPilot::~EnemyPilot() = default;
 
 void EnemyPilot::update(double secondsElapsed) {
+  if (secondsElapsed <= 0.0) {
+    return;
+  }
   Vector2D<double> error =
       enemyAmpersand_.currentPosition() - playerAmpersand_.currentPosition();
 

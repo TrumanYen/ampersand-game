@@ -2,7 +2,7 @@
 
 #include <domain/vector2d.h>
 
-enum class TuiColor { Red, Green, Blue };
+enum class TuiColor { Red, Green, Blue, WhiteOnRed, Transparent };
 
 struct TuiCell {
   char character;
