@@ -2,8 +2,11 @@
 
 #include <domain/vector2d.h>
 
+#include <memory>
+
 enum class ThrusterState;
 class MapState;
+class ElasticBody;
 
 class AmpersandSimulation {
   // All units of distance in meters and frame of reference is right down
@@ -19,14 +22,9 @@ public:
   ThrusterState currentThrusterState() const;
 
 private:
-  void displaceAmpersand(Vector2D<double> displacement);
-  Vector2D<double> currentAcceleration() const;
+  Vector2D<double> getAccelFromThruster() const;
 
 private:
-  const MapState &mapState_;
-
-  Vector2D<double> pos_;
-  Vector2D<double> vel_;
-
+  std::unique_ptr<ElasticBody> physics_;
   ThrusterState thrusterState_;
 };
