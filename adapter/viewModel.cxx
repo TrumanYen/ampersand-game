@@ -3,7 +3,7 @@
 #include <adapter/tuiCell.h>
 #include <algorithm>
 #include <domain/thrusterState.h>
-#include <useCase/ampersandStatus.h>
+#include <useCase/ampersand.h>
 #include <useCase/useCase.h>
 
 ViewModel::ViewModel(UseCase &useCase)
@@ -14,9 +14,9 @@ ViewModel::~ViewModel() = default;
 
 std::vector<TuiCell> ViewModel::cellsToRender() const {
   std::vector<TuiCell> cells;
-  addRenderableCellsForAmpersand(useCase_.friendlyAmpersandStatus(),
-                                 TuiColor::Green, cells);
-  addRenderableCellsForAmpersand(useCase_.enemyAmpersandStatus(), TuiColor::Red,
+  addRenderableCellsForAmpersand(useCase_.friendlyAmpersand(), TuiColor::Green,
+                                 cells);
+  addRenderableCellsForAmpersand(useCase_.enemyAmpersand(), TuiColor::Red,
                                  cells);
   return cells;
 }
@@ -44,7 +44,7 @@ void ViewModel::setThrusterState(ThrusterState state) {
 }
 
 Vector2D<int>
-ViewModel::ampersandPositionCharsXY(const AmpersandStatus &ampersand) const {
+ViewModel::ampersandPositionCharsXY(const Ampersand &ampersand) const {
 
   Vector2D<double> currentPosMeters = ampersand.currentPosition();
 
@@ -57,7 +57,7 @@ ViewModel::ampersandPositionCharsXY(const AmpersandStatus &ampersand) const {
 }
 
 void ViewModel::addRenderableCellsForAmpersand(
-    const AmpersandStatus &ampersand, TuiColor color,
+    const Ampersand &ampersand, TuiColor color,
     std::vector<TuiCell> &cellsOut) const {
   Vector2D<int> loc = ampersandPositionCharsXY(ampersand);
   cellsOut.emplace_back('&', color, loc);

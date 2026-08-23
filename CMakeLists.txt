@@ -23,7 +23,7 @@ target_sources(${ExeName} PRIVATE
   external/ncursesStyleManager.cxx
   adapter/viewModel.cxx
   useCase/useCase.cxx
-  useCase/ampersandStatus.cxx
+  useCase/ampersand.cxx
   useCase/enemyPilot.cxx
   domain/ampersandSimulation.cxx
   domain/mapState.cxx

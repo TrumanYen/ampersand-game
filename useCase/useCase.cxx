@@ -3,26 +3,23 @@
 #include <domain/ampersandSimulation.h>
 #include <domain/mapState.h>
 #include <domain/simulationDomain.h>
-#include <useCase/ampersandStatus.h>
+#include <useCase/ampersand.h>
 #include <useCase/enemyPilot.h>
 
 UseCase::UseCase(SimulationDomain &domain)
     : domain_(domain), enemyPilot_(std::make_unique<EnemyPilot>(
                            domain.ampersandSim(), domain.enemyAmpersandSim())),
-      friendlyAmpersandStatus_(
-          std::make_unique<AmpersandStatus>(domain.ampersandSim())),
-      enemyAmpersandStatus_(
-          std::make_unique<AmpersandStatus>(domain.enemyAmpersandSim())) {}
+      friendlyAmpersand_(std::make_unique<Ampersand>(domain.ampersandSim())),
+      enemyAmpersand_(std::make_unique<Ampersand>(domain.enemyAmpersandSim())) {
+}
 
 UseCase::~UseCase() = default;
 
-const AmpersandStatus &UseCase::friendlyAmpersandStatus() const {
-  return *friendlyAmpersandStatus_;
+const Ampersand &UseCase::friendlyAmpersand() const {
+  return *friendlyAmpersand_;
 }
 
-const AmpersandStatus &UseCase::enemyAmpersandStatus() const {
-  return *enemyAmpersandStatus_;
-}
+const Ampersand &UseCase::enemyAmpersand() const { return *enemyAmpersand_; }
 
 double UseCase::mapWidthMeters() const {
   return domain_.mapState().mapWidthMeters();

@@ -2,7 +2,7 @@
 
 #include <memory>
 
-class AmpersandStatus;
+class Ampersand;
 class EnemyPilot;
 class SimulationDomain;
 enum class ThrusterState;
@@ -12,8 +12,8 @@ public:
   UseCase(SimulationDomain &domain);
   ~UseCase();
 
-  const AmpersandStatus &friendlyAmpersandStatus() const;
-  const AmpersandStatus &enemyAmpersandStatus() const;
+  const Ampersand &friendlyAmpersand() const;
+  const Ampersand &enemyAmpersand() const;
   double mapWidthMeters() const;
   bool gameOver() const;
 
@@ -24,6 +24,6 @@ public:
 private:
   SimulationDomain &domain_;
   std::unique_ptr<EnemyPilot> enemyPilot_;
-  std::unique_ptr<AmpersandStatus> friendlyAmpersandStatus_;
-  std::unique_ptr<AmpersandStatus> enemyAmpersandStatus_;
+  std::unique_ptr<Ampersand> friendlyAmpersand_;
+  std::unique_ptr<Ampersand> enemyAmpersand_;
 };

@@ -5,11 +5,11 @@
 class AmpersandSimulation;
 enum class ThrusterState;
 
-class AmpersandStatus {
+class Ampersand {
 public:
   // ideally should take in a read-only interface but we don't have that yet
-  AmpersandStatus(const AmpersandSimulation &ampersand);
-  ~AmpersandStatus();
+  Ampersand(const AmpersandSimulation &ampersand);
+  ~Ampersand();
 
   ThrusterState currentThrusterState() const;
   Vector2D<double> currentPosition() const;

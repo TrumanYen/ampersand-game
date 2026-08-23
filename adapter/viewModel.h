@@ -4,7 +4,7 @@
 #include <ncurses.h>
 #include <vector>
 
-class AmpersandStatus;
+class Ampersand;
 class UseCase;
 enum class ThrusterState;
 struct TuiCell;
@@ -24,9 +24,8 @@ public:
   void setThrusterState(ThrusterState state);
 
 private:
-  Vector2D<int>
-  ampersandPositionCharsXY(const AmpersandStatus &ampersand) const;
-  void addRenderableCellsForAmpersand(const AmpersandStatus &ampersand,
+  Vector2D<int> ampersandPositionCharsXY(const Ampersand &ampersand) const;
+  void addRenderableCellsForAmpersand(const Ampersand &ampersand,
                                       TuiColor color,
                                       std::vector<TuiCell> &cellsOut) const;
 
