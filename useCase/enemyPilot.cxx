@@ -8,7 +8,7 @@
 namespace {
 const double POSITIVE_DELTA_ERROR_CUTOFF = 3.0;
 const double NEGATIVE_DELTA_ERROR_CUTOFF = -1.0 * POSITIVE_DELTA_ERROR_CUTOFF;
-const double GRAVITY_BIAS = 0.5;
+const double GRAVITY_BIAS = 0.4;
 } // namespace
 
 EnemyPilot::EnemyPilot(const Ampersand &playerAmpersand,
