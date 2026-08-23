@@ -9,8 +9,8 @@ UseCase::UseCase(SimulationDomain &domain)
     : domain_(domain),
       friendlyAmpersand_(std::make_unique<Ampersand>(domain.collidableBodyA())),
       enemyAmpersand_(std::make_unique<Ampersand>(domain.collidableBodyB())),
-      enemyPilot_(std::make_unique<EnemyPilot>(*friendlyAmpersand_,
-                                               *enemyAmpersand_)) {}
+      enemyPilot_(std::make_unique<EnemyPilot>(
+          *friendlyAmpersand_, *enemyAmpersand_, domain_.mapState())) {}
 UseCase::~UseCase() = default;
 
 const Ampersand &UseCase::friendlyAmpersand() const {
