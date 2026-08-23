@@ -1,7 +1,7 @@
 #include <domain/ampersandSimulation.h>
 
 #include <domain/elasticBody.h>
-#include <domain/thrusterState.h>
+#include <useCase/thrusterState.h>
 
 namespace {
 const double THRUSTER_ACCEL_MPSS = 15.0;

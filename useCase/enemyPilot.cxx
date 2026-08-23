@@ -2,7 +2,7 @@
 
 #include <cmath>
 #include <domain/ampersandSimulation.h>
-#include <domain/thrusterState.h>
+#include <useCase/thrusterState.h>
 
 namespace {
 const double POSITIVE_DELTA_ERROR_CUTOFF = 3.0;

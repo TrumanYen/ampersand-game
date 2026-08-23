@@ -2,7 +2,7 @@
 
 #include <adapter/viewModel.h>
 #include <chrono>
-#include <domain/thrusterState.h>
+#include <useCase/thrusterState.h>
 #include <external/ncursesStyleManager.h>
 #include <thread>
 

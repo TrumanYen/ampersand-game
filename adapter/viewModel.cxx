@@ -2,7 +2,7 @@
 
 #include <adapter/tuiCell.h>
 #include <algorithm>
-#include <domain/thrusterState.h>
+#include <useCase/thrusterState.h>
 #include <useCase/ampersand.h>
 #include <useCase/useCase.h>
 
