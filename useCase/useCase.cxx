@@ -1,6 +1,5 @@
 #include <useCase/useCase.h>
 
-#include <domain/ampersandSimulation.h>
 #include <domain/mapState.h>
 #include <domain/simulationDomain.h>
 #include <useCase/ampersand.h>
@@ -8,11 +7,10 @@
 
 UseCase::UseCase(SimulationDomain &domain)
     : domain_(domain),
-      friendlyAmpersand_(std::make_unique<Ampersand>(domain.ampersandSim())),
-      enemyAmpersand_(std::make_unique<Ampersand>(domain.enemyAmpersandSim())),
+      friendlyAmpersand_(std::make_unique<Ampersand>(domain.collidableBodyA())),
+      enemyAmpersand_(std::make_unique<Ampersand>(domain.collidableBodyB())),
       enemyPilot_(std::make_unique<EnemyPilot>(*friendlyAmpersand_,
                                                *enemyAmpersand_)) {}
-
 UseCase::~UseCase() = default;
 
 const Ampersand &UseCase::friendlyAmpersand() const {
@@ -25,7 +23,7 @@ double UseCase::mapWidthMeters() const {
   return domain_.mapState().mapWidthMeters();
 }
 
-bool UseCase::gameOver() const { return domain_.ampersandsHaveCollided(); }
+bool UseCase::gameOver() const { return domain_.bodiesHaveCollided(); }
 
 void UseCase::commandFriendlyThrusterState(ThrusterState state) {
   friendlyAmpersand_->setThrusterState(state);

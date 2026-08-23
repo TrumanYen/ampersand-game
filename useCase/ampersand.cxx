@@ -1,21 +1,21 @@
 #include <useCase/ampersand.h>
 
-#include <domain/ampersandSimulation.h>
+#include <domain/elasticBody.h>
 #include <useCase/thrusterState.h>
 
 namespace {
 const double THRUSTER_ACCEL_MPSS = 15.0;
 } // namespace
 
-Ampersand::Ampersand(AmpersandSimulation &ampersand)
-    : ampersand_(ampersand), thrusterState_(ThrusterState::Off) {}
+Ampersand::Ampersand(ElasticBody &elasticBody)
+    : elasticBody_(elasticBody), thrusterState_(ThrusterState::Off) {}
 
 Ampersand::~Ampersand() = default;
 
 ThrusterState Ampersand::currentThrusterState() const { return thrusterState_; }
 
 Vector2D<double> Ampersand::currentPosition() const {
-  return ampersand_.currentPos();
+  return elasticBody_.position();
 }
 
 void Ampersand::setThrusterState(ThrusterState thrusterState) {
@@ -41,5 +41,5 @@ void Ampersand::fireThruster() {
   default:
     break;
   }
-  ampersand_.accelerate(accel);
+  elasticBody_.accelerate(accel);
 }

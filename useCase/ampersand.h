@@ -2,14 +2,14 @@
 
 #include <domain/vector2d.h>
 
-class AmpersandSimulation;
+class ElasticBody;
 enum class ThrusterState;
 
 class Ampersand {
 public:
   // ideally should take in a interface of the underlying sim but we don't have
   // that yet
-  Ampersand(AmpersandSimulation &ampersand);
+  Ampersand(ElasticBody &elasticBody);
   ~Ampersand();
 
   ThrusterState currentThrusterState() const;
@@ -19,6 +19,6 @@ public:
   void fireThruster();
 
 private:
-  AmpersandSimulation &ampersand_;
+  ElasticBody &elasticBody_;
   ThrusterState thrusterState_;
 };

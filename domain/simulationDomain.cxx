@@ -1,7 +1,8 @@
 #include <domain/simulationDomain.h>
 
-#include <domain/ampersandSimulation.h>
+#include <domain/elasticBody.h>
 #include <domain/mapState.h>
+#include <memory>
 
 namespace {
 const double AMPERSAND_RADIUS = 0.01;
@@ -12,17 +13,17 @@ const double DOUBLE_AMPERSAND_RADIUS_SQRD =
 
 SimulationDomain::SimulationDomain()
     : mapState_(std::make_unique<MapState>()),
-      ampersandSim_(std::make_unique<AmpersandSimulation>(
-          *mapState_, mapState_->topLeft())),
-      enemyAmpersandSim_(std::make_unique<AmpersandSimulation>(
-          *mapState_, mapState_->topRight())) {}
+      collidableBodyA_(
+          std::make_unique<ElasticBody>(*mapState_, mapState_->topLeft())),
+      collidableBodyB_(
+          std::make_unique<ElasticBody>(*mapState_, mapState_->topRight())) {}
 
 SimulationDomain::~SimulationDomain() {}
 
-bool SimulationDomain::ampersandsHaveCollided() const {
+bool SimulationDomain::bodiesHaveCollided() const {
   double distanceSquaredMagnitude =
-      ampersandSim_->currentPos().squaredDistanceFrom(
-          enemyAmpersandSim_->currentPos());
+      collidableBodyA_->position().squaredDistanceFrom(
+          collidableBodyB_->position());
   if (distanceSquaredMagnitude <= DOUBLE_AMPERSAND_RADIUS_SQRD) {
     return true;
   }
@@ -31,14 +32,12 @@ bool SimulationDomain::ampersandsHaveCollided() const {
 
 void SimulationDomain::incrementTime(double timeDeltaSeconds) {
   mapState_->incrementTime(timeDeltaSeconds);
-  ampersandSim_->incrementTime(timeDeltaSeconds);
-  enemyAmpersandSim_->incrementTime(timeDeltaSeconds);
+  collidableBodyA_->incrementTime(timeDeltaSeconds);
+  collidableBodyB_->incrementTime(timeDeltaSeconds);
 }
 
 MapState &SimulationDomain::mapState() { return *mapState_; }
 
-AmpersandSimulation &SimulationDomain::ampersandSim() { return *ampersandSim_; }
+ElasticBody &SimulationDomain::collidableBodyA() { return *collidableBodyA_; }
 
-AmpersandSimulation &SimulationDomain::enemyAmpersandSim() {
-  return *enemyAmpersandSim_;
-}
+ElasticBody &SimulationDomain::collidableBodyB() { return *collidableBodyB_; }

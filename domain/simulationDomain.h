@@ -2,23 +2,23 @@
 
 #include <memory>
 
+class ElasticBody;
 class MapState;
-class AmpersandSimulation;
 
 class SimulationDomain {
 public:
   SimulationDomain();
   ~SimulationDomain();
 
-  bool ampersandsHaveCollided() const;
+  bool bodiesHaveCollided() const;
 
   void incrementTime(double timeDeltaSeconds);
   MapState &mapState();
-  AmpersandSimulation &ampersandSim();
-  AmpersandSimulation &enemyAmpersandSim();
+  ElasticBody &collidableBodyA();
+  ElasticBody &collidableBodyB();
 
 private:
   std::unique_ptr<MapState> mapState_;
-  std::unique_ptr<AmpersandSimulation> ampersandSim_;
-  std::unique_ptr<AmpersandSimulation> enemyAmpersandSim_;
+  std::unique_ptr<ElasticBody> collidableBodyA_;
+  std::unique_ptr<ElasticBody> collidableBodyB_;
 };
