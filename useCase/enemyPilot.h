@@ -2,19 +2,18 @@
 
 #include <domain/vector2d.h>
 
-class AmpersandSimulation;
+class Ampersand;
 
 class EnemyPilot {
 public:
-  EnemyPilot(const AmpersandSimulation &playerAmpersand,
-             AmpersandSimulation &enemyAmpersand);
+  EnemyPilot(const Ampersand &playerAmpersand, Ampersand &enemyAmpersand);
   ~EnemyPilot();
 
   void update(double secondsElapsed);
 
 private:
-  const AmpersandSimulation &playerAmpersand_;
-  AmpersandSimulation &enemyAmpersand_;
+  const Ampersand &playerAmpersand_;
+  Ampersand &enemyAmpersand_;
 
   Vector2D<double> previousError_;
 };

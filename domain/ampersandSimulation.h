@@ -15,16 +15,11 @@ public:
   ~AmpersandSimulation();
 
   void incrementTime(double timeSeconds);
-  void setThrusterState(ThrusterState state);
+  void accelerate(Vector2D<double> acceleration);
 
   Vector2D<double> currentPos() const;
   Vector2D<double> currentVel() const;
-  ThrusterState currentThrusterState() const;
-
-private:
-  Vector2D<double> getAccelFromThruster() const;
 
 private:
   std::unique_ptr<ElasticBody> physics_;
-  ThrusterState thrusterState_;
 };

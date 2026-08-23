@@ -7,11 +7,11 @@
 #include <useCase/enemyPilot.h>
 
 UseCase::UseCase(SimulationDomain &domain)
-    : domain_(domain), enemyPilot_(std::make_unique<EnemyPilot>(
-                           domain.ampersandSim(), domain.enemyAmpersandSim())),
+    : domain_(domain),
       friendlyAmpersand_(std::make_unique<Ampersand>(domain.ampersandSim())),
-      enemyAmpersand_(std::make_unique<Ampersand>(domain.enemyAmpersandSim())) {
-}
+      enemyAmpersand_(std::make_unique<Ampersand>(domain.enemyAmpersandSim())),
+      enemyPilot_(std::make_unique<EnemyPilot>(*friendlyAmpersand_,
+                                               *enemyAmpersand_)) {}
 
 UseCase::~UseCase() = default;
 
@@ -28,7 +28,7 @@ double UseCase::mapWidthMeters() const {
 bool UseCase::gameOver() const { return domain_.ampersandsHaveCollided(); }
 
 void UseCase::commandFriendlyThrusterState(ThrusterState state) {
-  domain_.ampersandSim().setThrusterState(state);
+  friendlyAmpersand_->setThrusterState(state);
 }
 
 void UseCase::setNewAspectRatio(double heightToWidthRatio) {
@@ -37,5 +37,7 @@ void UseCase::setNewAspectRatio(double heightToWidthRatio) {
 
 void UseCase::incrementTime(double timeSeconds) {
   enemyPilot_->update(timeSeconds);
+  friendlyAmpersand_->fireThruster();
+  enemyAmpersand_->fireThruster();
   domain_.incrementTime(timeSeconds);
 }

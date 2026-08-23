@@ -23,7 +23,7 @@ public:
 
 private:
   SimulationDomain &domain_;
-  std::unique_ptr<EnemyPilot> enemyPilot_;
   std::unique_ptr<Ampersand> friendlyAmpersand_;
   std::unique_ptr<Ampersand> enemyAmpersand_;
+  std::unique_ptr<EnemyPilot> enemyPilot_;
 };

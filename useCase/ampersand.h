@@ -7,13 +7,18 @@ enum class ThrusterState;
 
 class Ampersand {
 public:
-  // ideally should take in a read-only interface but we don't have that yet
-  Ampersand(const AmpersandSimulation &ampersand);
+  // ideally should take in a interface of the underlying sim but we don't have
+  // that yet
+  Ampersand(AmpersandSimulation &ampersand);
   ~Ampersand();
 
   ThrusterState currentThrusterState() const;
   Vector2D<double> currentPosition() const;
 
+  void setThrusterState(ThrusterState thrusterState);
+  void fireThruster();
+
 private:
-  const AmpersandSimulation &ampersand_;
+  AmpersandSimulation &ampersand_;
+  ThrusterState thrusterState_;
 };

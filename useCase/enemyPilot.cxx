@@ -1,7 +1,7 @@
 #include <useCase/enemyPilot.h>
 
 #include <cmath>
-#include <domain/ampersandSimulation.h>
+#include <useCase/ampersand.h>
 #include <useCase/thrusterState.h>
 
 namespace {
@@ -9,8 +9,8 @@ const double POSITIVE_DELTA_ERROR_CUTOFF = 3.0;
 const double NEGATIVE_DELTA_ERROR_CUTOFF = -1.0 * POSITIVE_DELTA_ERROR_CUTOFF;
 } // namespace
 
-EnemyPilot::EnemyPilot(const AmpersandSimulation &playerAmpersand,
-                       AmpersandSimulation &enemyAmpersand)
+EnemyPilot::EnemyPilot(const Ampersand &playerAmpersand,
+                       Ampersand &enemyAmpersand)
     : playerAmpersand_(playerAmpersand), enemyAmpersand_(enemyAmpersand),
       previousError_(0.0, 0.0) {}
 
@@ -18,7 +18,7 @@ EnemyPilot::~EnemyPilot() = default;
 
 void EnemyPilot::update(double secondsElapsed) {
   Vector2D<double> error =
-      enemyAmpersand_.currentPos() - playerAmpersand_.currentPos();
+      enemyAmpersand_.currentPosition() - playerAmpersand_.currentPosition();
 
   double errorXMag = std::abs(error.x);
   double errorYMag = std::abs(error.y);
