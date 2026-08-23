@@ -28,6 +28,7 @@ target_sources(${ExeName} PRIVATE
   domain/mapState.cxx
   domain/simulationDomain.cxx
   domain/elasticBody.cxx
+  domain/collisionSimulator.cxx
 )
 
 target_include_directories(${ExeName} PRIVATE 
