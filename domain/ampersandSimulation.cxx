@@ -15,7 +15,8 @@ AmpersandSimulation::AmpersandSimulation(const MapState &mapState,
 AmpersandSimulation::~AmpersandSimulation() = default;
 
 void AmpersandSimulation::incrementTime(double timeSeconds) {
-  physics_->incrementTime(timeSeconds, getAccelFromThruster());
+  physics_->accelerate(getAccelFromThruster());
+  physics_->incrementTime(timeSeconds);
 }
 
 void AmpersandSimulation::setThrusterState(ThrusterState state) {

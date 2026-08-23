@@ -10,20 +10,24 @@ const Vector2D<double> GRAVITY(0.0, 9.81);
 } // namespace
 
 ElasticBody::ElasticBody(const MapState &mapState, Vector2D<double> spawnPoint)
-    : mapState_(mapState), pos_(spawnPoint), vel_(0.0, 0.0) {}
+    : mapState_(mapState), pos_(spawnPoint), vel_(0.0, 0.0), accel_(GRAVITY) {}
 
 ElasticBody::~ElasticBody() = default;
 
-void ElasticBody::incrementTime(double timeSeconds,
-                                Vector2D<double> externalAcceleration) {
-  Vector2D<double> newVelUnclamped =
-      ((GRAVITY + externalAcceleration) * timeSeconds) + vel_;
+void ElasticBody::accelerate(Vector2D<double> acceleration) {
+  accel_ = accel_ + acceleration;
+}
+
+void ElasticBody::incrementTime(double timeSeconds) {
+  Vector2D<double> newVelUnclamped = (accel_ * timeSeconds) + vel_;
   vel_.x = std::clamp(newVelUnclamped.x, NEGATIVE_TERMINAL_VELOCITY,
                       TERMINAL_VELOCITY);
   vel_.y = std::clamp(newVelUnclamped.y, NEGATIVE_TERMINAL_VELOCITY,
                       TERMINAL_VELOCITY);
 
   attemptDisplacement(vel_ * timeSeconds);
+
+  accel_ = GRAVITY; // reset acceleration at the end of each frame
 }
 
 // for now we can assume the only collisions are the walls, and that all the

@@ -10,7 +10,8 @@ public:
 
   ~ElasticBody();
 
-  void incrementTime(double timeSeconds, Vector2D<double> externalAcceleration);
+  void accelerate(Vector2D<double> acceleration);
+  void incrementTime(double timeSeconds);
 
   Vector2D<double> position() const;
   Vector2D<double> velocity() const;
@@ -23,4 +24,5 @@ private:
 
   Vector2D<double> pos_;
   Vector2D<double> vel_;
+  Vector2D<double> accel_;
 };
