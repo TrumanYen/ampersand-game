@@ -14,6 +14,7 @@ ViewModel::~ViewModel() = default;
 
 std::vector<TuiCell> ViewModel::cellsToRender() const {
   std::vector<TuiCell> cells;
+  addRenderableCellsForShrapnel(cells);
   addRenderableCellsForAmpersand(useCase_.friendlyAmpersand(), TuiColor::Green,
                                  cells);
   addRenderableCellsForAmpersand(useCase_.enemyAmpersand(), TuiColor::Red,
@@ -23,7 +24,7 @@ std::vector<TuiCell> ViewModel::cellsToRender() const {
 
 TuiColor ViewModel::backgroundColor() const {
   return useCase_.damageSustained() ? TuiColor::WhiteOnRed
-                                    : TuiColor::Transparent;
+                                    : TuiColor::WhiteOnTransparent;
 }
 
 void ViewModel::updateTerminalDimensions(int numCharsX, int numCharsY) {
@@ -46,13 +47,10 @@ void ViewModel::setThrusterState(ThrusterState state) {
   useCase_.commandFriendlyThrusterState(state);
 }
 
-Vector2D<int>
-ViewModel::ampersandPositionCharsXY(const Ampersand &ampersand) const {
-
-  Vector2D<double> currentPosMeters = ampersand.currentPosition();
-
-  int posXUnbounded = currentPosMeters.x * simToTerminalScaleX_;
-  int posYUnbounded = currentPosMeters.y * simToTerminalScaleY_;
+Vector2D<int> ViewModel::scaleFromMapSpaceToTerminalCoords(
+    const Vector2D<double> &locMapSpace) const {
+  int posXUnbounded = locMapSpace.x * simToTerminalScaleX_;
+  int posYUnbounded = locMapSpace.y * simToTerminalScaleY_;
   int posXBounded = std::clamp(posXUnbounded, 0, maxXChars_);
   int posYBounded = std::clamp(posYUnbounded, 0, maxYChars_);
 
@@ -62,7 +60,8 @@ ViewModel::ampersandPositionCharsXY(const Ampersand &ampersand) const {
 void ViewModel::addRenderableCellsForAmpersand(
     const Ampersand &ampersand, TuiColor color,
     std::vector<TuiCell> &cellsOut) const {
-  Vector2D<int> loc = ampersandPositionCharsXY(ampersand);
+  Vector2D<int> loc =
+      scaleFromMapSpaceToTerminalCoords(ampersand.currentPosition());
   cellsOut.emplace_back('&', color, loc);
   ThrusterState thrusterState = ampersand.currentThrusterState();
   TuiColor blue = TuiColor::Blue;
@@ -94,5 +93,16 @@ void ViewModel::addRenderableCellsForAmpersand(
   case ThrusterState::Off:
   default:
     break;
+  }
+}
+
+void ViewModel::addRenderableCellsForShrapnel(
+    std::vector<TuiCell> &cellsOut) const {
+  std::vector<Vector2D<double>> fragmentLocations;
+  useCase_.putTheParticlesInTheBag(fragmentLocations);
+  TuiColor white = TuiColor::WhiteOnTransparent;
+  for (const Vector2D<double> &fragLoc : fragmentLocations) {
+    cellsOut.emplace_back('*', white,
+                          scaleFromMapSpaceToTerminalCoords(fragLoc));
   }
 }

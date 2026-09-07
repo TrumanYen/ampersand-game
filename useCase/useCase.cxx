@@ -4,13 +4,16 @@
 #include <domain/simulationDomain.h>
 #include <useCase/ampersand.h>
 #include <useCase/enemyPilot.h>
+#include <useCase/particleManager.h>
 
 UseCase::UseCase(SimulationDomain &domain)
     : domain_(domain),
       friendlyAmpersand_(std::make_unique<Ampersand>(domain.collidableBodyA())),
       enemyAmpersand_(std::make_unique<Ampersand>(domain.collidableBodyB())),
       enemyPilot_(std::make_unique<EnemyPilot>(
-          *friendlyAmpersand_, *enemyAmpersand_, domain_.mapState())) {}
+          *friendlyAmpersand_, *enemyAmpersand_, domain_.mapState())),
+      particles_(
+          std::make_unique<ParticleManager>(domain.elasticBodyRegistry())) {}
 UseCase::~UseCase() = default;
 
 const Ampersand &UseCase::friendlyAmpersand() const {
@@ -25,6 +28,11 @@ double UseCase::mapWidthMeters() const {
 
 bool UseCase::damageSustained() const { return domain_.bodiesHaveCollided(); }
 
+void UseCase::putTheParticlesInTheBag(
+    std::vector<Vector2D<double>> &theBag) const {
+  particles_->putTheParticlesInTheBag(theBag);
+}
+
 void UseCase::commandFriendlyThrusterState(ThrusterState state) {
   friendlyAmpersand_->setThrusterState(state);
 }
@@ -38,4 +46,8 @@ void UseCase::incrementTime(double timeSeconds) {
   friendlyAmpersand_->fireThruster();
   enemyAmpersand_->fireThruster();
   domain_.incrementTime(timeSeconds);
+  particles_->incrementTime(timeSeconds);
+  if (domain_.bodiesHaveCollided()) {
+    particles_->createParticlesAt(friendlyAmpersand_->currentPosition());
+  }
 }

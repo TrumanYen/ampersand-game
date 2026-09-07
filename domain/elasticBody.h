@@ -6,13 +6,14 @@ class MapState;
 
 class ElasticBody {
 public:
-  ElasticBody(const MapState &mapState, Vector2D<double> spawnPoint);
+  // TODO: pass in by const ref
+  ElasticBody(const MapState &mapState, Vector2D<double> spawnPoint,
+              Vector2D<double> initialVelocity);
 
   ~ElasticBody();
 
   void accelerate(Vector2D<double> acceleration);
   void incrementTime(double timeSeconds);
-
   void setVelocity(Vector2D<double> velocity);
 
   Vector2D<double> position() const;

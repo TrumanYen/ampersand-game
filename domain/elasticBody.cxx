@@ -10,8 +10,10 @@ const Vector2D<double> GRAVITY(0.0, 9.81);
 const double AIR_RESISTANCE_VELOCITY_MULTIPLIER = 0.995;
 } // namespace
 
-ElasticBody::ElasticBody(const MapState &mapState, Vector2D<double> spawnPoint)
-    : mapState_(mapState), pos_(spawnPoint), vel_(0.0, 0.0), accel_(GRAVITY) {}
+ElasticBody::ElasticBody(const MapState &mapState, Vector2D<double> spawnPoint,
+                         Vector2D<double> initialVelocity)
+    : mapState_(mapState), pos_(spawnPoint), vel_(initialVelocity),
+      accel_(GRAVITY) {}
 
 ElasticBody::~ElasticBody() = default;
 

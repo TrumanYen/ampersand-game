@@ -24,10 +24,13 @@ public:
   void setThrusterState(ThrusterState state);
 
 private:
-  Vector2D<int> ampersandPositionCharsXY(const Ampersand &ampersand) const;
+  Vector2D<int>
+  scaleFromMapSpaceToTerminalCoords(const Vector2D<double> &locMapSpace) const;
   void addRenderableCellsForAmpersand(const Ampersand &ampersand,
                                       TuiColor color,
                                       std::vector<TuiCell> &cellsOut) const;
+
+  void addRenderableCellsForShrapnel(std::vector<TuiCell> &cellsOut) const;
 
 private:
   int maxXChars_;

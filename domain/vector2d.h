@@ -3,6 +3,10 @@
 #include <cmath>
 #include <type_traits>
 
+// TODO: make a fwd header for this so we stop including all this in all the
+// files.  Also start passing this around as const refs rather than copying
+// everything.
+
 template <typename T>
 concept Numeric = std::is_arithmetic_v<T>;
 
