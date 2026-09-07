@@ -1,7 +1,7 @@
 #pragma once
 
 #include <cmath>
-#include <domain/vector2d_fwd.h>
+#include <toolkit/vector2d_fwd.h>
 
 template <Numeric T> class Vector2D {
 public:

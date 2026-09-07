@@ -1,6 +1,6 @@
 #pragma once
 
-#include <domain/vector2d.h>
+#include <toolkit/vector2d.h>
 
 class Ampersand;
 class MapState;

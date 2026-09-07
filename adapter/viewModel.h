@@ -1,6 +1,6 @@
 #pragma once
 
-#include <domain/vector2d_fwd.h>
+#include <toolkit/vector2d_fwd.h>
 #include <ncurses.h>
 #include <vector>
 

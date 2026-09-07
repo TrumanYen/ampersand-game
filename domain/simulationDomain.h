@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include <domain/vector2d.h>
+#include <toolkit/vector2d.h>
 
 class ElasticBody;
 class ElasticBodyRegistry;

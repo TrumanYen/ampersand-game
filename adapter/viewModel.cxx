@@ -2,7 +2,7 @@
 
 #include <adapter/tuiCell.h>
 #include <algorithm>
-#include <domain/vector2d.h>
+#include <toolkit/vector2d.h>
 #include <useCase/ampersand.h>
 #include <useCase/thrusterState.h>
 #include <useCase/useCase.h>
