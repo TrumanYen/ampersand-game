@@ -10,10 +10,11 @@ const Vector2D<double> GRAVITY(0.0, 9.81);
 const double AIR_RESISTANCE_VELOCITY_MULTIPLIER = 0.995;
 } // namespace
 
-ElasticBody::ElasticBody(const MapState &mapState, Vector2D<double> spawnPoint,
+ElasticBody::ElasticBody(const MapState &mapState, double collisionCoefficient,
+                         Vector2D<double> spawnPoint,
                          Vector2D<double> initialVelocity)
-    : mapState_(mapState), pos_(spawnPoint), vel_(initialVelocity),
-      accel_(GRAVITY) {}
+    : mapState_(mapState), collisionCoefficient_(collisionCoefficient),
+      pos_(spawnPoint), vel_(initialVelocity), accel_(GRAVITY) {}
 
 ElasticBody::~ElasticBody() = default;
 
@@ -48,15 +49,15 @@ void ElasticBody::attemptDisplacement(Vector2D<double> displacement) {
   pos_.y = std::clamp(desiredPos.y, 0.0, mapState_.mapHeightMeters());
 
   if (horizontalCollisionDetected) {
-    vel_.x *= -0.8;
-    vel_.y *= 0.9;
+    vel_.x *= (-0.9 * collisionCoefficient_);
+    vel_.y *= collisionCoefficient_;
   }
   if (floorCollisionDetected) {
     vel_.y -= mapState_.floorVelocity();
   }
   if (ceilingCollisionDetected || floorCollisionDetected) {
-    vel_.y *= -0.8;
-    vel_.x *= 0.9;
+    vel_.y *= (-0.9 * collisionCoefficient_);
+    vel_.x *= collisionCoefficient_;
   }
 }
 

@@ -13,7 +13,8 @@ public:
   ElasticBodyRegistry(const MapState &mapState);
   ~ElasticBodyRegistry();
 
-  uint64_t createElasticBody(const Vector2D<double> &initialLocation,
+  uint64_t createElasticBody(double collisionCoefficient,
+                             const Vector2D<double> &initialLocation,
                              const Vector2D<double> &initialVelocity);
   void removeElasticBody(uint64_t id);
 

@@ -12,6 +12,7 @@ const double MIN_LIFETIME_SEC = 0.2;
 const double MIN_LIFETIME_INCREMENT_PER_PARTICLE = 0.05;
 const double MAX_LIFETIME_INCREMENT_PER_PARTICLE = 0.3;
 const double MAX_RANDOM_INVERSE = 1.0 / std::minstd_rand::max();
+const double PARTICLE_ELASTICITY = 0.6;
 } // namespace
 
 ParticleManager::ParticleManager(ElasticBodyRegistry &elasticBodyRegistry)
@@ -59,8 +60,8 @@ void ParticleManager::createParticlesAt(const Vector2D<double> &blastLocation) {
                      MAX_VELOCITY_PER_COMPONENT_MPS),
         randomDouble(MIN_VELOCITY_PER_COMPONENT_MPS,
                      MAX_VELOCITY_PER_COMPONENT_MPS));
-    uint64_t id =
-        elasticBodyRegistry_.createElasticBody(blastLocation, initialVelocity);
+    uint64_t id = elasticBodyRegistry_.createElasticBody(
+        PARTICLE_ELASTICITY, blastLocation, initialVelocity);
     double expiryTimeDeltaFromPreviousParticle =
         randomDouble(MIN_LIFETIME_INCREMENT_PER_PARTICLE,
                      MAX_LIFETIME_INCREMENT_PER_PARTICLE);

@@ -6,13 +6,18 @@
 #include <domain/mapState.h>
 #include <memory>
 
+namespace {
+const double AMPERSAND_ELASTICITY = 0.9;
+}
 SimulationDomain::SimulationDomain()
     : mapState_(std::make_unique<MapState>()),
       elasticBodyRegistry_(std::make_unique<ElasticBodyRegistry>(*mapState_)),
       collidableBodyA_(std::make_unique<ElasticBody>(
-          *mapState_, mapState_->topLeft(), Vector2D<double>(0.0, 0.0))),
+          *mapState_, AMPERSAND_ELASTICITY, mapState_->topLeft(),
+          Vector2D<double>(0.0, 0.0))),
       collidableBodyB_(std::make_unique<ElasticBody>(
-          *mapState_, mapState_->topRight(), Vector2D<double>(0.0, 0.0))),
+          *mapState_, AMPERSAND_ELASTICITY, mapState_->topRight(),
+          Vector2D<double>(0.0, 0.0))),
       collisionSim_(std::make_unique<CollisionSimulator>(*collidableBodyA_,
                                                          *collidableBodyB_)) {}
 

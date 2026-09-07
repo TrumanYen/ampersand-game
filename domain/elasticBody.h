@@ -7,8 +7,8 @@ class MapState;
 class ElasticBody {
 public:
   // TODO: pass in by const ref
-  ElasticBody(const MapState &mapState, Vector2D<double> spawnPoint,
-              Vector2D<double> initialVelocity);
+  ElasticBody(const MapState &mapState, double collisionCoefficient,
+              Vector2D<double> spawnPoint, Vector2D<double> initialVelocity);
 
   ~ElasticBody();
 
@@ -24,6 +24,7 @@ private:
 
 private:
   const MapState &mapState_;
+  const double collisionCoefficient_;
 
   Vector2D<double> pos_;
   Vector2D<double> vel_;

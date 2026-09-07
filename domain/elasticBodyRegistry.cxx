@@ -7,11 +7,12 @@ ElasticBodyRegistry::ElasticBodyRegistry(const MapState &mapState)
 ElasticBodyRegistry::~ElasticBodyRegistry() = default;
 
 uint64_t ElasticBodyRegistry::createElasticBody(
-    const Vector2D<double> &initialLocation,
+    double collisionCoefficient, const Vector2D<double> &initialLocation,
     const Vector2D<double> &initialVelocity) {
   uint64_t id = nextAvailableId_++;
-  map_.insert({id, std::make_shared<ElasticBody>(mapState_, initialLocation,
-                                                 initialVelocity)});
+  map_.insert(
+      {id, std::make_shared<ElasticBody>(mapState_, collisionCoefficient,
+                                         initialLocation, initialVelocity)});
 
   return id;
 }
