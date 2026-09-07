@@ -1,6 +1,6 @@
 #pragma once
 
-#include <domain/vector2d.h>
+#include <domain/vector2d_fwd.h>
 #include <memory>
 #include <vector>
 

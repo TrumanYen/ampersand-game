@@ -3,7 +3,7 @@
 #include <memory>
 #include <unordered_map>
 
-#include <domain/vector2d.h>
+#include <domain/vector2d_fwd.h>
 
 class ElasticBody;
 class MapState;

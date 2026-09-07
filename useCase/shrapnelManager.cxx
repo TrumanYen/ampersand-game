@@ -3,6 +3,7 @@
 
 #include <domain/elasticBody.h>
 #include <domain/elasticBodyRegistry.h>
+#include <domain/vector2d.h>
 
 namespace {
 const int SHRAPNEL_COUNT_PER_BLAST = 5;

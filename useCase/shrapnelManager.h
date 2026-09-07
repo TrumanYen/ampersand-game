@@ -5,7 +5,7 @@
 #include <random>
 #include <vector>
 
-#include <domain/vector2d.h>
+#include <domain/vector2d_fwd.h>
 
 class ElasticBodyRegistry;
 
