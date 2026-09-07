@@ -97,7 +97,7 @@ void ViewModel::addRenderableCellsForShrapnel(
   useCase_.putTheParticlesInTheBag(fragmentLocations);
   TuiColor white = TuiColor::White;
   for (const Vector2D<double> &fragLoc : fragmentLocations) {
-    cellsOut.emplace_back('*', white,
+    cellsOut.emplace_back('.', white,
                           scaleFromMapSpaceToTerminalCoords(fragLoc));
   }
 }
