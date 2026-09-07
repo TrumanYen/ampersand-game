@@ -36,8 +36,8 @@ void ElasticBody::incrementTime(double timeSeconds) {
 }
 
 // for now we can assume the only collisions are the walls, and that all the
+// walls except the floor are stationary.
 void ElasticBody::attemptDisplacement(const Vector2D<double> &displacement) {
-  // walls except the floor are stationary.
   Vector2D<double> desiredPos = pos_ + displacement;
 
   bool horizontalCollisionDetected =
