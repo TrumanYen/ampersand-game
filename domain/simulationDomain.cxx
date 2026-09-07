@@ -27,6 +27,10 @@ bool SimulationDomain::bodiesHaveCollided() const {
   return collisionSim_->collisionOccured();
 }
 
+const Vector2D<double> &SimulationDomain::avgVelocityBeforeCollision() const {
+  return collisionSim_->avgVelBeforeCollision();
+}
+
 double SimulationDomain::separationVelocityOfBodies() const {
   return collisionSim_->separationVelocity();
 }

@@ -49,8 +49,9 @@ void ShrapnelManager::putTheShrapnelInTheBag(
   }
 }
 
-void ShrapnelManager::createShrapnelPiecesAt(
-    const Vector2D<double> &blastLocation, double collisionVelocity) {
+void ShrapnelManager::createShrapnelPieces(
+    const Vector2D<double> &blastLocation, double collisionVelocity,
+    const Vector2D<double> &averageShrapnelVelocity) {
   double earliestExpiryTime = currentTimeSeconds_ + MIN_LIFETIME_SEC;
   if (!idToExpiryTimeQueue_.empty()) {
     // We can't insert shrapnel that will expire earlier than anything already
@@ -59,11 +60,13 @@ void ShrapnelManager::createShrapnelPiecesAt(
         std::max(earliestExpiryTime, idToExpiryTimeQueue_.back().second);
   }
   for (int i = 0; i < SHRAPNEL_COUNT_PER_BLAST; i++) {
-    Vector2D<double> initialVelocity(
+    Vector2D<double> velocityRelativeToAverage(
         generateShrapnelVelFromCollisionVel(collisionVelocity),
         generateShrapnelVelFromCollisionVel(collisionVelocity));
+
     uint64_t id = elasticBodyRegistry_.createElasticBody(
-        SHRAPNEL_ELASTICITY, blastLocation, initialVelocity);
+        SHRAPNEL_ELASTICITY, blastLocation,
+        velocityRelativeToAverage + averageShrapnelVelocity);
     double expiryTimeDeltaFromPreviousParticle =
         randomDouble(MIN_LIFETIME_INCREMENT_PER_PARTICLE,
                      MAX_LIFETIME_INCREMENT_PER_PARTICLE);

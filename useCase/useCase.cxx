@@ -46,8 +46,9 @@ void UseCase::incrementTime(double timeSeconds) {
   domain_.incrementTime(timeSeconds);
   shrapnelManager_->incrementTime(timeSeconds);
   if (domain_.bodiesHaveCollided()) {
-    shrapnelManager_->createShrapnelPiecesAt(
+    shrapnelManager_->createShrapnelPieces(
         friendlyAmpersand_->currentPosition(),
-        -1.0 * domain_.separationVelocityOfBodies());
+        -1.0 * domain_.separationVelocityOfBodies(),
+        domain_.avgVelocityBeforeCollision());
   }
 }

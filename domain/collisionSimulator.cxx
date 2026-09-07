@@ -12,11 +12,13 @@ const double COLLISION_EXPLOSION_MULTIPLIER = 3.0;
 } // namespace
 
 CollisionSimulator::CollisionSimulator(ElasticBody &bodyA, ElasticBody &bodyB)
-    : bodyA_(bodyA), bodyB_(bodyB), collisionDetected_(false) {}
+    : bodyA_(bodyA), bodyB_(bodyB), avgVelBeforeCollision_(0.0, 0.0),
+      collisionDetected_(false) {}
 
 CollisionSimulator::~CollisionSimulator() = default;
 
 void CollisionSimulator::detectAndSimulateCollision() {
+  avgVelBeforeCollision_ = (bodyA_.velocity() + bodyB_.velocity()) * 0.5;
   double distanceSquaredMagnitude =
       bodyA_.position().squaredDistanceFrom(bodyB_.position());
   bool bodiesAreOverlapping =
@@ -55,6 +57,10 @@ void CollisionSimulator::detectAndSimulateCollision() {
   bodyB_.setVelocity(
       (normalNormalized * velANormalComp * COLLISION_EXPLOSION_MULTIPLIER) +
       (tangentialNormalized * velBTangentialComp));
+}
+
+const Vector2D<double> &CollisionSimulator::avgVelBeforeCollision() const {
+  return avgVelBeforeCollision_;
 }
 
 bool CollisionSimulator::collisionOccured() const { return collisionDetected_; }

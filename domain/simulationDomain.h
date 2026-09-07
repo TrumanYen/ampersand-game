@@ -2,6 +2,8 @@
 
 #include <memory>
 
+#include <domain/vector2d.h>
+
 class ElasticBody;
 class ElasticBodyRegistry;
 class MapState;
@@ -13,6 +15,7 @@ public:
   ~SimulationDomain();
 
   bool bodiesHaveCollided() const;
+  const Vector2D<double> &avgVelocityBeforeCollision() const;
   double separationVelocityOfBodies() const;
 
   void incrementTime(double timeDeltaSeconds);

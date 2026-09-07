@@ -17,8 +17,9 @@ public:
 
   void incrementTime(double deltaTimeSeconds);
   void putTheShrapnelInTheBag(std::vector<Vector2D<double>> &theBag) const;
-  void createShrapnelPiecesAt(const Vector2D<double> &blastLocation,
-                              double collisionVelocity);
+  void createShrapnelPieces(const Vector2D<double> &blastLocation,
+                            double collisionVelocity,
+                            const Vector2D<double> &averageShrapnelVelocity);
 
 private:
   double randomDouble(double min, double max);
