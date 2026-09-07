@@ -17,10 +17,12 @@ public:
 
   void incrementTime(double deltaTimeSeconds);
   void putTheShrapnelInTheBag(std::vector<Vector2D<double>> &theBag) const;
-  void createShrapnelPieceAt(const Vector2D<double> &blastLocation);
+  void createShrapnelPiecesAt(const Vector2D<double> &blastLocation,
+                              double collisionVelocity);
 
 private:
   double randomDouble(double min, double max);
+  double generateShrapnelVelFromCollisionVel(double collisionVelocity);
 
 private:
   ElasticBodyRegistry &elasticBodyRegistry_;

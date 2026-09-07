@@ -34,9 +34,9 @@ void CollisionSimulator::detectAndSimulateCollision() {
   Vector2D<double> normalNormalized = normal / normalMag;
   Vector2D<double> tangentialNormalized = normalNormalized.normalVector();
   Vector2D<double> relVel = bodyB_.velocity() - bodyA_.velocity();
-  double collisionApproachVelocity = relVel.dot(normalNormalized);
-  collisionDetected_ = (collisionApproachVelocity < 0.0);
-  if (collisionApproachVelocity > -0.5) {
+  separationVelocity_ = relVel.dot(normalNormalized);
+  collisionDetected_ = (separationVelocity_ < 0.0);
+  if (separationVelocity_ > -0.5) {
     // We should not simulate slow collisions because the bodies will simply
     // stick together
     return;
@@ -58,3 +58,7 @@ void CollisionSimulator::detectAndSimulateCollision() {
 }
 
 bool CollisionSimulator::collisionOccured() const { return collisionDetected_; }
+
+double CollisionSimulator::separationVelocity() const {
+  return separationVelocity_;
+}

@@ -13,6 +13,7 @@ public:
   ~SimulationDomain();
 
   bool bodiesHaveCollided() const;
+  double separationVelocityOfBodies() const;
 
   void incrementTime(double timeDeltaSeconds);
   MapState &mapState();

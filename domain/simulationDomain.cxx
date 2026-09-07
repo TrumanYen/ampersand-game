@@ -27,6 +27,10 @@ bool SimulationDomain::bodiesHaveCollided() const {
   return collisionSim_->collisionOccured();
 }
 
+double SimulationDomain::separationVelocityOfBodies() const {
+  return collisionSim_->separationVelocity();
+}
+
 void SimulationDomain::incrementTime(double timeDeltaSeconds) {
   mapState_->incrementTime(timeDeltaSeconds);
   elasticBodyRegistry_->incrementTimeForAllBodies(timeDeltaSeconds);

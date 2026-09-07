@@ -5,14 +5,17 @@
 #include <domain/elasticBodyRegistry.h>
 
 namespace {
-const int NUM_PARTICLES_PER_BLAST = 5;
-const double MIN_VELOCITY_PER_COMPONENT_MPS = -10.0;
-const double MAX_VELOCITY_PER_COMPONENT_MPS = 10.0;
+const int SHRAPNEL_COUNT_PER_BLAST = 5;
+
+const double SHRAPNEL_VELOCITY_FACTOR = 0.8;
+
 const double MIN_LIFETIME_SEC = 0.2;
 const double MIN_LIFETIME_INCREMENT_PER_PARTICLE = 0.05;
 const double MAX_LIFETIME_INCREMENT_PER_PARTICLE = 0.3;
+
+const double SHRAPNEL_ELASTICITY = 0.6;
+
 const double MAX_RANDOM_INVERSE = 1.0 / std::minstd_rand::max();
-const double PARTICLE_ELASTICITY = 0.6;
 } // namespace
 
 ShrapnelManager::ShrapnelManager(ElasticBodyRegistry &elasticBodyRegistry)
@@ -46,8 +49,8 @@ void ShrapnelManager::putTheShrapnelInTheBag(
   }
 }
 
-void ShrapnelManager::createShrapnelPieceAt(
-    const Vector2D<double> &blastLocation) {
+void ShrapnelManager::createShrapnelPiecesAt(
+    const Vector2D<double> &blastLocation, double collisionVelocity) {
   double earliestExpiryTime = currentTimeSeconds_ + MIN_LIFETIME_SEC;
   if (!idToExpiryTimeQueue_.empty()) {
     // We can't insert shrapnel that will expire earlier than anything already
@@ -55,14 +58,12 @@ void ShrapnelManager::createShrapnelPieceAt(
     earliestExpiryTime =
         std::max(earliestExpiryTime, idToExpiryTimeQueue_.back().second);
   }
-  for (int i = 0; i < NUM_PARTICLES_PER_BLAST; i++) {
+  for (int i = 0; i < SHRAPNEL_COUNT_PER_BLAST; i++) {
     Vector2D<double> initialVelocity(
-        randomDouble(MIN_VELOCITY_PER_COMPONENT_MPS,
-                     MAX_VELOCITY_PER_COMPONENT_MPS),
-        randomDouble(MIN_VELOCITY_PER_COMPONENT_MPS,
-                     MAX_VELOCITY_PER_COMPONENT_MPS));
+        generateShrapnelVelFromCollisionVel(collisionVelocity),
+        generateShrapnelVelFromCollisionVel(collisionVelocity));
     uint64_t id = elasticBodyRegistry_.createElasticBody(
-        PARTICLE_ELASTICITY, blastLocation, initialVelocity);
+        SHRAPNEL_ELASTICITY, blastLocation, initialVelocity);
     double expiryTimeDeltaFromPreviousParticle =
         randomDouble(MIN_LIFETIME_INCREMENT_PER_PARTICLE,
                      MAX_LIFETIME_INCREMENT_PER_PARTICLE);
@@ -76,4 +77,10 @@ double ShrapnelManager::randomDouble(double min, double max) {
   // responsibly};
   double randomNormalized = rng_() * MAX_RANDOM_INVERSE;
   return min + ((max - min) * randomNormalized);
+}
+
+double
+ShrapnelManager::generateShrapnelVelFromCollisionVel(double collisionVelocity) {
+  return randomDouble(-1.0 * SHRAPNEL_VELOCITY_FACTOR * collisionVelocity,
+                      SHRAPNEL_VELOCITY_FACTOR * collisionVelocity);
 }
