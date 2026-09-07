@@ -14,7 +14,7 @@ Ampersand::~Ampersand() = default;
 
 ThrusterState Ampersand::currentThrusterState() const { return thrusterState_; }
 
-Vector2D<double> Ampersand::currentPosition() const {
+const Vector2D<double> &Ampersand::currentPosition() const {
   return elasticBody_.position();
 }
 

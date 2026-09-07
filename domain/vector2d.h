@@ -12,11 +12,11 @@ public:
   T y;
 
 public:
-  Vector2D<T> operator+(Vector2D<T> rhs) const {
+  Vector2D<T> operator+(const Vector2D<T> &rhs) const {
     return Vector2D<T>(x + rhs.x, y + rhs.y);
   }
 
-  Vector2D<T> operator-(Vector2D<T> rhs) const {
+  Vector2D<T> operator-(const Vector2D<T> &rhs) const {
     return Vector2D<T>(x - rhs.x, y - rhs.y);
   }
 
@@ -28,7 +28,7 @@ public:
     return Vector2D<T>(x * scalar, y * scalar);
   }
 
-  T squaredDistanceFrom(Vector2D<T> other) const {
+  T squaredDistanceFrom(const Vector2D<T> &other) const {
     Vector2D<T> displacement = (*this) - other;
     return (displacement.x * displacement.x) +
            (displacement.y * displacement.y);
@@ -36,7 +36,9 @@ public:
 
   T magnitude() { return std::sqrt((x * x) + (y * y)); }
 
-  T dot(Vector2D<T> other) const { return (x * other.x) + (y * other.y); }
+  T dot(const Vector2D<T> &other) const {
+    return (x * other.x) + (y * other.y);
+  }
 
   Vector2D<T> normalVector() const { return Vector2D<T>(-1.0 * y, x); }
 };

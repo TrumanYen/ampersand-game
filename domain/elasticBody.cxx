@@ -11,14 +11,14 @@ const double AIR_RESISTANCE_VELOCITY_MULTIPLIER = 0.995;
 } // namespace
 
 ElasticBody::ElasticBody(const MapState &mapState, double collisionCoefficient,
-                         Vector2D<double> spawnPoint,
-                         Vector2D<double> initialVelocity)
+                         const Vector2D<double> &spawnPoint,
+                         const Vector2D<double> &initialVelocity)
     : mapState_(mapState), collisionCoefficient_(collisionCoefficient),
       pos_(spawnPoint), vel_(initialVelocity), accel_(GRAVITY) {}
 
 ElasticBody::~ElasticBody() = default;
 
-void ElasticBody::accelerate(Vector2D<double> acceleration) {
+void ElasticBody::accelerate(const Vector2D<double> &acceleration) {
   accel_ = accel_ + acceleration;
 }
 
@@ -36,7 +36,7 @@ void ElasticBody::incrementTime(double timeSeconds) {
 }
 
 // for now we can assume the only collisions are the walls, and that all the
-void ElasticBody::attemptDisplacement(Vector2D<double> displacement) {
+void ElasticBody::attemptDisplacement(const Vector2D<double> &displacement) {
   // walls except the floor are stationary.
   Vector2D<double> desiredPos = pos_ + displacement;
 
@@ -61,8 +61,10 @@ void ElasticBody::attemptDisplacement(Vector2D<double> displacement) {
   }
 }
 
-void ElasticBody::setVelocity(Vector2D<double> velocity) { vel_ = velocity; }
+void ElasticBody::setVelocity(const Vector2D<double> &velocity) {
+  vel_ = velocity;
+}
 
-Vector2D<double> ElasticBody::position() const { return pos_; }
+const Vector2D<double> &ElasticBody::position() const { return pos_; }
 
-Vector2D<double> ElasticBody::velocity() const { return vel_; }
+const Vector2D<double> &ElasticBody::velocity() const { return vel_; }

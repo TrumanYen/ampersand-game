@@ -13,7 +13,7 @@ public:
   ~Ampersand();
 
   ThrusterState currentThrusterState() const;
-  Vector2D<double> currentPosition() const;
+  const Vector2D<double> &currentPosition() const;
 
   void setThrusterState(ThrusterState thrusterState);
   void fireThruster();
