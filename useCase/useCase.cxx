@@ -4,7 +4,7 @@
 #include <domain/simulationDomain.h>
 #include <useCase/ampersand.h>
 #include <useCase/enemyPilot.h>
-#include <useCase/particleManager.h>
+#include <useCase/shrapnelManager.h>
 
 UseCase::UseCase(SimulationDomain &domain)
     : domain_(domain),
@@ -12,8 +12,8 @@ UseCase::UseCase(SimulationDomain &domain)
       enemyAmpersand_(std::make_unique<Ampersand>(domain.collidableBodyB())),
       enemyPilot_(std::make_unique<EnemyPilot>(
           *friendlyAmpersand_, *enemyAmpersand_, domain_.mapState())),
-      particles_(
-          std::make_unique<ParticleManager>(domain.elasticBodyRegistry())) {}
+      shrapnelManager_(
+          std::make_unique<ShrapnelManager>(domain.elasticBodyRegistry())) {}
 UseCase::~UseCase() = default;
 
 const Ampersand &UseCase::friendlyAmpersand() const {
@@ -26,9 +26,9 @@ double UseCase::mapWidthMeters() const {
   return domain_.mapState().mapWidthMeters();
 }
 
-void UseCase::putTheParticlesInTheBag(
+void UseCase::putTheShrapnelInTheBag(
     std::vector<Vector2D<double>> &theBag) const {
-  particles_->putTheParticlesInTheBag(theBag);
+  shrapnelManager_->putTheShrapnelInTheBag(theBag);
 }
 
 void UseCase::commandFriendlyThrusterState(ThrusterState state) {
@@ -44,8 +44,9 @@ void UseCase::incrementTime(double timeSeconds) {
   friendlyAmpersand_->fireThruster();
   enemyAmpersand_->fireThruster();
   domain_.incrementTime(timeSeconds);
-  particles_->incrementTime(timeSeconds);
+  shrapnelManager_->incrementTime(timeSeconds);
   if (domain_.bodiesHaveCollided()) {
-    particles_->createParticlesAt(friendlyAmpersand_->currentPosition());
+    shrapnelManager_->createShrapnelPieceAt(
+        friendlyAmpersand_->currentPosition());
   }
 }

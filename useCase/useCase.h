@@ -6,7 +6,7 @@
 
 class Ampersand;
 class EnemyPilot;
-class ParticleManager;
+class ShrapnelManager;
 class SimulationDomain;
 enum class ThrusterState;
 
@@ -18,7 +18,7 @@ public:
   const Ampersand &friendlyAmpersand() const;
   const Ampersand &enemyAmpersand() const;
   double mapWidthMeters() const;
-  void putTheParticlesInTheBag(std::vector<Vector2D<double>> &theBag) const;
+  void putTheShrapnelInTheBag(std::vector<Vector2D<double>> &theBag) const;
 
   void commandFriendlyThrusterState(ThrusterState state);
   void setNewAspectRatio(double heightToWidthRatio);
@@ -29,5 +29,5 @@ private:
   std::unique_ptr<Ampersand> friendlyAmpersand_;
   std::unique_ptr<Ampersand> enemyAmpersand_;
   std::unique_ptr<EnemyPilot> enemyPilot_;
-  std::unique_ptr<ParticleManager> particles_;
+  std::unique_ptr<ShrapnelManager> shrapnelManager_;
 };

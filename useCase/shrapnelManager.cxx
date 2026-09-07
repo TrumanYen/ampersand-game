@@ -1,5 +1,5 @@
 #include <random>
-#include <useCase/particleManager.h>
+#include <useCase/shrapnelManager.h>
 
 #include <domain/elasticBody.h>
 #include <domain/elasticBodyRegistry.h>
@@ -15,13 +15,13 @@ const double MAX_RANDOM_INVERSE = 1.0 / std::minstd_rand::max();
 const double PARTICLE_ELASTICITY = 0.6;
 } // namespace
 
-ParticleManager::ParticleManager(ElasticBodyRegistry &elasticBodyRegistry)
+ShrapnelManager::ShrapnelManager(ElasticBodyRegistry &elasticBodyRegistry)
     : elasticBodyRegistry_(elasticBodyRegistry), currentTimeSeconds_(0.0),
       rng_(std::random_device{}()) {}
 
-ParticleManager::~ParticleManager() = default;
+ShrapnelManager::~ShrapnelManager() = default;
 
-void ParticleManager::incrementTime(double deltaTimeSeconds) {
+void ShrapnelManager::incrementTime(double deltaTimeSeconds) {
   currentTimeSeconds_ += deltaTimeSeconds;
   while (!idToExpiryTimeQueue_.empty()) {
     std::pair<uint64_t, double> oldestParticle = idToExpiryTimeQueue_.front();
@@ -33,7 +33,7 @@ void ParticleManager::incrementTime(double deltaTimeSeconds) {
   }
 }
 
-void ParticleManager::putTheParticlesInTheBag(
+void ShrapnelManager::putTheShrapnelInTheBag(
     std::vector<Vector2D<double>> &theBag) const {
   theBag.clear();
   for (const std::pair<uint64_t, double> &idToExpiryPair :
@@ -46,11 +46,12 @@ void ParticleManager::putTheParticlesInTheBag(
   }
 }
 
-void ParticleManager::createParticlesAt(const Vector2D<double> &blastLocation) {
+void ShrapnelManager::createShrapnelPieceAt(
+    const Vector2D<double> &blastLocation) {
   double earliestExpiryTime = currentTimeSeconds_ + MIN_LIFETIME_SEC;
   if (!idToExpiryTimeQueue_.empty()) {
-    // We can't insert particles that will expire earlier than anything already
-    // in the queue, as this would break how we check for expired particles
+    // We can't insert shrapnel that will expire earlier than anything already
+    // in the queue, as this would break how we check for expired shrapnel
     earliestExpiryTime =
         std::max(earliestExpiryTime, idToExpiryTimeQueue_.back().second);
   }
@@ -70,7 +71,7 @@ void ParticleManager::createParticlesAt(const Vector2D<double> &blastLocation) {
   }
 }
 
-double ParticleManager::randomDouble(double min, double max) {
+double ShrapnelManager::randomDouble(double min, double max) {
   // if (max <= min){ just don't do that bro this is a private function use it
   // responsibly};
   double randomNormalized = rng_() * MAX_RANDOM_INVERSE;

@@ -9,15 +9,15 @@
 
 class ElasticBodyRegistry;
 
-class ParticleManager {
+class ShrapnelManager {
 public:
-  ParticleManager(ElasticBodyRegistry &elasticBodyRegistry);
+  ShrapnelManager(ElasticBodyRegistry &elasticBodyRegistry);
 
-  ~ParticleManager();
+  ~ShrapnelManager();
 
   void incrementTime(double deltaTimeSeconds);
-  void putTheParticlesInTheBag(std::vector<Vector2D<double>> &theBag) const;
-  void createParticlesAt(const Vector2D<double> &blastLocation);
+  void putTheShrapnelInTheBag(std::vector<Vector2D<double>> &theBag) const;
+  void createShrapnelPieceAt(const Vector2D<double> &blastLocation);
 
 private:
   double randomDouble(double min, double max);

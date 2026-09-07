@@ -93,11 +93,11 @@ void ViewModel::addRenderableCellsForAmpersand(
 
 void ViewModel::addRenderableCellsForShrapnel(
     std::vector<TuiCell> &cellsOut) const {
-  std::vector<Vector2D<double>> fragmentLocations;
-  useCase_.putTheParticlesInTheBag(fragmentLocations);
+  std::vector<Vector2D<double>> shrapnelLocations;
+  useCase_.putTheShrapnelInTheBag(shrapnelLocations);
   TuiColor white = TuiColor::White;
-  for (const Vector2D<double> &fragLoc : fragmentLocations) {
+  for (const Vector2D<double> &shrapnelLoc : shrapnelLocations) {
     cellsOut.emplace_back('.', white,
-                          scaleFromMapSpaceToTerminalCoords(fragLoc));
+                          scaleFromMapSpaceToTerminalCoords(shrapnelLoc));
   }
 }

@@ -25,7 +25,7 @@ target_sources(${ExeName} PRIVATE
   useCase/useCase.cxx
   useCase/ampersand.cxx
   useCase/enemyPilot.cxx
-  useCase/particleManager.cxx
+  useCase/shrapnelManager.cxx
   domain/mapState.cxx
   domain/simulationDomain.cxx
   domain/elasticBody.cxx
