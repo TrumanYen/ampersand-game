@@ -31,6 +31,7 @@ target_sources(${ExeName} PRIVATE
   domain/elasticBody.cxx
   domain/elasticBodyRegistry.cxx
   domain/collisionSimulator.cxx
+  toolkit/logger.cxx
 )
 
 target_include_directories(${ExeName} PRIVATE 
