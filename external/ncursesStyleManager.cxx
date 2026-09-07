@@ -12,10 +12,8 @@ NcursesStyleManager::NcursesStyleManager() {
   colorToStyleMap_[TuiColor::Green] = COLOR_PAIR(2);
   init_pair(3, COLOR_BLUE, -1);
   colorToStyleMap_[TuiColor::Blue] = COLOR_PAIR(3);
-  init_pair(4, COLOR_WHITE, COLOR_RED);
-  colorToStyleMap_[TuiColor::WhiteOnRed] = COLOR_PAIR(4);
-  init_pair(5, COLOR_WHITE, -1);
-  colorToStyleMap_[TuiColor::WhiteOnTransparent] = COLOR_PAIR(5);
+  init_pair(4, COLOR_WHITE, -1);
+  colorToStyleMap_[TuiColor::White] = COLOR_PAIR(4);
 }
 
 NcursesStyleManager::~NcursesStyleManager() = default;

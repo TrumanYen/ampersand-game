@@ -17,7 +17,6 @@ public:
   ~ViewModel();
 
   std::vector<TuiCell> cellsToRender() const;
-  TuiColor backgroundColor() const;
 
   void updateTerminalDimensions(int numCharsX, int numCharsY);
   void incrementTimeMs(int milliseconds);

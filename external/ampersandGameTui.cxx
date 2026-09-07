@@ -49,7 +49,6 @@ void AmpersandGameTui::run() {
               cell.character | styles_->styleWithColor(cell.color));
     }
 
-    bkgd(styles_->styleWithColor(viewModel_.backgroundColor()));
     refresh();
     // Quick and dirty timing loop.  Should thread properly later
     std::this_thread::sleep_for(std::chrono::milliseconds(FRAME_PERIOD_MS));

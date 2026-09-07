@@ -26,8 +26,6 @@ double UseCase::mapWidthMeters() const {
   return domain_.mapState().mapWidthMeters();
 }
 
-bool UseCase::damageSustained() const { return domain_.bodiesHaveCollided(); }
-
 void UseCase::putTheParticlesInTheBag(
     std::vector<Vector2D<double>> &theBag) const {
   particles_->putTheParticlesInTheBag(theBag);

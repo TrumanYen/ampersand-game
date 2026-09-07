@@ -18,7 +18,6 @@ public:
   const Ampersand &friendlyAmpersand() const;
   const Ampersand &enemyAmpersand() const;
   double mapWidthMeters() const;
-  bool damageSustained() const;
   void putTheParticlesInTheBag(std::vector<Vector2D<double>> &theBag) const;
 
   void commandFriendlyThrusterState(ThrusterState state);

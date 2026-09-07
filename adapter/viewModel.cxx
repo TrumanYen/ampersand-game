@@ -22,11 +22,6 @@ std::vector<TuiCell> ViewModel::cellsToRender() const {
   return cells;
 }
 
-TuiColor ViewModel::backgroundColor() const {
-  return useCase_.damageSustained() ? TuiColor::WhiteOnRed
-                                    : TuiColor::WhiteOnTransparent;
-}
-
 void ViewModel::updateTerminalDimensions(int numCharsX, int numCharsY) {
   maxXChars_ = numCharsX - 1;
   maxYChars_ = numCharsY - 1;
@@ -100,7 +95,7 @@ void ViewModel::addRenderableCellsForShrapnel(
     std::vector<TuiCell> &cellsOut) const {
   std::vector<Vector2D<double>> fragmentLocations;
   useCase_.putTheParticlesInTheBag(fragmentLocations);
-  TuiColor white = TuiColor::WhiteOnTransparent;
+  TuiColor white = TuiColor::White;
   for (const Vector2D<double> &fragLoc : fragmentLocations) {
     cellsOut.emplace_back('*', white,
                           scaleFromMapSpaceToTerminalCoords(fragLoc));
